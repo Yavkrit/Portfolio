@@ -40,12 +40,9 @@
   }, 500);
 
   // ── YV LOGO → scroll to contact ──────────────────────────
-  const navBrand = document.getElementById('nav-brand');
-  if (navBrand) {
-    navBrand.addEventListener('click', () => {
-      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-    });
-  }
+  document.getElementById('nav-brand')?.addEventListener('click', () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  });
 
   // ── THEME TOGGLE (Dark / Light) ───────────────────────────
   const themeToggle = document.getElementById('theme-toggle');

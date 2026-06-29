@@ -9,10 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<!-- Three.js for hero particle background -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<!-- PDF.js for certificate thumbnail rendering -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<!-- PDF.js for certificate thumbnail rendering — deferred -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -53,27 +51,19 @@
     <button id="theme-toggle" class="theme-toggle-btn" title="Toggle light / dark mode" aria-label="Toggle colour theme">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
         <circle cx="12" cy="12" r="4.5"/>
-        <line x1="12" y1="2"    x2="12" y2="5"/>
-        <line x1="12" y1="19"   x2="12" y2="22"/>
-        <line x1="2"  y1="12"   x2="5"  y2="12"/>
-        <line x1="19" y1="12"   x2="22" y2="12"/>
-        <line x1="4.93" y1="4.93"   x2="6.83" y2="6.83"/>
-        <line x1="17.17" y1="17.17" x2="19.07" y2="19.07"/>
-        <line x1="4.93" y1="19.07"  x2="6.83" y2="17.17"/>
-        <line x1="17.17" y1="6.83"  x2="19.07" y2="4.93"/>
+        <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+        <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+        <line x1="4.93" y1="4.93" x2="6.83" y2="6.83"/><line x1="17.17" y1="17.17" x2="19.07" y2="19.07"/>
+        <line x1="4.93" y1="19.07" x2="6.83" y2="17.17"/><line x1="17.17" y1="6.83" x2="19.07" y2="4.93"/>
       </svg>
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
       </svg>
     </button>
-    <button id="gesture-toggle" class="gesture-toggle-btn" title="Enable gesture navigation" aria-label="Toggle gesture navigation">
-      <svg class="gest-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 11V7a2 2 0 0 0-4 0"/>
-        <path d="M14 10.5V5a2 2 0 0 0-4 0v3"/>
-        <path d="M10 9.5V4a2 2 0 0 0-4 0v8"/>
-        <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
-      </svg>
-    </button>
+    <a href="https://github.com/Yavkrit" target="_blank" class="nav-github-btn" aria-label="GitHub profile">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.087.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836a9.578 9.578 0 012.504.336c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.138 18.163 20 14.418 20 10 20 4.477 15.523 0 10 0z"/></svg>
+      GitHub
+    </a>
     <a href="assets/resume.pdf" target="_blank" class="btn-outline-sm">Resume ↓</a>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -97,8 +87,8 @@
 <section id="hero">
   <div id="hero-sticky">
 
-    <!-- Particle canvas -->
-    <canvas id="hero-canvas"></canvas>
+    <!-- CSS dot-grid background (replaces Three.js) -->
+    <div class="hero-dot-grid"></div>
 
     <!-- Aurora layer -->
     <div class="hero-aurora"></div>
@@ -108,138 +98,57 @@
 
     <!-- Portrait -->
     <div class="hero-portrait-wrap" id="hero-portrait-wrap">
-      <!-- Base: clean portrait -->
       <img id="hero-portrait-main" src="images/portrait_1.png"
-           alt="Yavkrit Vashishtha" class="hero-portrait-img">
-      <!-- Tech layer: revealed on cursor hover -->
+           alt="Yavkrit Vashishtha" class="hero-portrait-img" loading="eager">
       <img id="hero-portrait-tech" src="images/portrait_tech.png.png"
-           alt="" class="hero-portrait-img hero-portrait-tech" aria-hidden="true">
-      <!-- Neon edge glow -->
+           alt="" class="hero-portrait-img hero-portrait-tech" aria-hidden="true" loading="lazy">
       <div class="hero-portrait-glow" id="hero-portrait-glow"></div>
 
-      <!-- Futuristic aura SVG — halo ring + body lines -->
+      <!-- Simplified aura — one halo ring + one chase arc + static brackets -->
       <svg id="hero-aura-svg" class="hero-aura-svg"
            viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg"
            preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-
-        <!-- ░░ HALO RINGS ░░ -->
-        <!-- Soft glow behind main halo (thick, blurred via filter) -->
-        <ellipse class="aura-halo-glow"  cx="200" cy="110" rx="76" ry="21"/>
-        <!-- Main halo ring -->
         <ellipse class="aura-halo-main"  cx="200" cy="110" rx="76" ry="21"/>
-        <!-- Chasing light arc on main halo -->
         <ellipse class="aura-halo-chase" cx="200" cy="110" rx="76" ry="21"/>
-        <!-- Inner halo (smaller, tighter) -->
-        <ellipse class="aura-halo-inner" cx="200" cy="110" rx="52" ry="14"/>
-        <!-- Outer orbit ring -->
-        <ellipse class="aura-orbit-out"  cx="200" cy="110" rx="102" ry="29"/>
-        <!-- Chasing arc on outer ring -->
-        <ellipse class="aura-orbit-chase" cx="200" cy="110" rx="102" ry="29"/>
-
-        <!-- ░░ HALO DATA NODES ░░ -->
-        <circle class="aura-node-dot" cx="276" cy="110" r="3.5"/>
-        <circle class="aura-node-dot" cx="124" cy="110" r="3.5"/>
-        <circle class="aura-node-dot delay1" cx="200" cy="89"  r="2.5"/>
-        <circle class="aura-node-dot delay2" cx="200" cy="131" r="2.5"/>
-
-        <!-- ░░ CORNER HUD BRACKETS ░░ -->
         <path class="aura-corner" d="M100 92 L68 92 L68 136"/>
         <path class="aura-corner" d="M300 92 L332 92 L332 136"/>
-
-        <!-- ░░ BODY SIDE LINES ░░ -->
-        <line class="aura-side-line" x1="80"  y1="168" x2="72"  y2="540"/>
-        <line class="aura-side-line" x1="320" y1="168" x2="328" y2="540"/>
-        <!-- Side line end caps -->
-        <circle class="aura-node-dot delay3" cx="72"  cy="540" r="3"/>
-        <circle class="aura-node-dot delay3" cx="328" cy="540" r="3"/>
-
-        <!-- ░░ SCAN LINE ░░ -->
-        <line class="aura-scan-line" x1="78" y1="0" x2="322" y2="0"/>
-        <!-- Scan end nodes -->
-        <circle class="aura-scan-node" cx="78"  cy="0" r="3.5"/>
-        <circle class="aura-scan-node" cx="322" cy="0" r="3.5"/>
-
-
       </svg>
+
       <div class="hero-overlay-bottom"></div>
       <div class="hero-overlay-sides"></div>
     </div>
 
-    <!-- Depth gradient overlays -->
+    <!-- Depth vignette -->
     <div class="hero-vignette"></div>
 
-    <!-- Radar scan beam — single sweep on entry -->
+    <!-- Radar scan beam — one-shot on entry -->
     <div class="hero-scanbeam" id="hero-scanbeam"></div>
-
-    <!-- Speed lines — burst on entry -->
-    <div class="hero-speedlines" id="hero-speedlines">
-      <div class="spline" style="--sl-top:17%;--sl-w:52%;--sl-d:.03s"></div>
-      <div class="spline" style="--sl-top:29%;--sl-w:35%;--sl-d:.11s;--sl-o:.65"></div>
-      <div class="spline" style="--sl-top:44%;--sl-w:62%;--sl-d:.06s;--sl-o:.85"></div>
-      <div class="spline" style="--sl-top:58%;--sl-w:28%;--sl-d:.17s;--sl-o:.55"></div>
-      <div class="spline" style="--sl-top:70%;--sl-w:45%;--sl-d:.09s;--sl-o:.75"></div>
-      <div class="spline" style="--sl-top:82%;--sl-w:22%;--sl-d:.24s;--sl-o:.4"></div>
-    </div>
-
-    <!-- Ambient light streaks (existing, kept) -->
-    <div class="hero-streaks">
-      <div class="streak s1"></div>
-      <div class="streak s2"></div>
-      <div class="streak s3"></div>
-    </div>
-
-    <!-- HUD overlay — floating engineering telemetry -->
-    <div class="hero-hud" id="hero-hud">
-
-      <!-- Left: identity tags -->
-      <div class="hud-tag ht-1" style="--ht-d:.0s">
-        <span class="hud-pip"></span>
-        <span class="hud-dash"></span>
-        <span class="hud-txt">CSIR-CSIO · AcSIR NEW DELHI</span>
-      </div>
-      <div class="hud-tag ht-2" style="--ht-d:.15s">
-        <span class="hud-pip"></span>
-        <span class="hud-dash"></span>
-        <span class="hud-txt">FIRMWARE · LINUX · RTOS</span>
-      </div>
-      <div class="hud-tag ht-3" style="--ht-d:.30s">
-        <span class="hud-pip"></span>
-        <span class="hud-dash"></span>
-        <span class="hud-txt">THZ · AI · DEEP LEARNING</span>
-      </div>
-
-      <!-- Right: stats -->
-      <div class="hud-stat hs-1" style="--hs-d:.0s">
-        <div class="hud-sval">
-          <span class="hud-n" data-val="2">0</span><span class="hud-unit">+</span>
-        </div>
-        <div class="hud-slbl">YRS EXP</div>
-      </div>
-
-    </div>
 
     <!-- Hero text content -->
     <div class="hero-content" id="hero-content">
-      <div class="hero-label" id="hero-label">EMBEDDED ENGINEER · AI RESEARCHER · PHD SCHOLAR</div>
+      <div class="hero-label" id="hero-label">EMBEDDED SYSTEMS · DOCTORAL RESEARCHER · CSIR-CSIO</div>
       <h1 class="hero-name" id="hero-name">
         <span class="hero-first" id="hero-first">Yavkrit</span>
         <span class="hero-last" id="hero-last">Vashishtha</span>
       </h1>
       <div class="hero-role-wrap" id="hero-role-wrap">
-        <span class="hero-role-prefix">I build</span>
-        <span class="hero-role-cycle" id="role-cycle">the future</span>
+        <span class="hero-role-prefix">I engineer</span>
+        <span class="hero-role-cycle" id="role-cycle">firmware systems</span>
       </div>
-      <p class="hero-tagline" id="hero-tagline">CSIR-CSIO · CHANDIGARH · ACSIR NEW DELHI</p>
+      <p class="hero-tagline" id="hero-tagline">eInfochips · Arrow Electronics · CSIR-CSIO · AcSIR New Delhi</p>
       <div class="hero-cta" id="hero-cta">
         <a href="#projects" class="btn-primary hero-btn-primary">
-          <span>Explore My Work</span>
+          <span>View Case Studies</span>
           <span class="hero-arrow">→</span>
         </a>
-        <a href="#contact" class="btn-ghost">Get In Touch</a>
+        <a href="https://github.com/Yavkrit" target="_blank" class="btn-ghost hero-gh-btn">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15" style="flex-shrink:0"><path d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.087.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836a9.578 9.578 0 012.504.336c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.138 18.163 20 14.418 20 10 20 4.477 15.523 0 10 0z"/></svg>
+          GitHub
+        </a>
       </div>
     </div>
 
-    <!-- Vertical progress bar (scroll depth) -->
+    <!-- Vertical progress bar -->
     <div class="hero-progress" id="hero-progress">
       <div class="hero-prog-fill" id="hero-prog-fill"></div>
     </div>
@@ -266,7 +175,10 @@
           <div class="about-portrait-glow"></div>
           <div class="about-portrait-tag">
             <span class="tag-role">Research Engineer</span>
-            <span class="tag-loc">📍 Chandigarh, India</span>
+            <span class="tag-loc">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="10" height="10" style="display:inline;vertical-align:middle;margin-right:3px"><path d="M6 1C4.34 1 3 2.34 3 4c0 2.5 3 7 3 7s3-4.5 3-7c0-1.66-1.34-3-3-3z"/><circle cx="6" cy="4" r="1.2"/></svg>
+              Chandigarh, India
+            </span>
           </div>
         </div>
 
@@ -472,34 +384,12 @@
   </div>
 </footer>
 
-<!-- Gesture Navigation Panel -->
-<div id="gesture-panel" class="gesture-panel" aria-hidden="true">
-  <div class="gesture-panel-header">
-    <span class="gesture-panel-title">GESTURE MODE</span>
-    <span class="gesture-status-dot"></span>
-  </div>
-  <div class="gesture-cam-wrap">
-    <video id="gesture-preview" class="gesture-preview" playsinline muted></video>
-    <div class="gesture-cam-overlay"></div>
-  </div>
-  <div id="gesture-label" class="gesture-label"></div>
-  <div id="gesture-hint" class="gesture-hint">
-    <div class="hint-row"><span class="hint-glyph hint-label">PALM</span><span>Open palm — scroll</span></div>
-    <div class="hint-row"><span class="hint-glyph hint-label">V</span><span>Victory — next section</span></div>
-    <div class="hint-row"><span class="hint-glyph hint-label">THB</span><span>Thumb up — scroll up</span></div>
-    <div class="hint-row"><span class="hint-glyph hint-label">PTR</span><span>Point — focus item</span></div>
-    <div class="hint-row"><span class="hint-glyph hint-label">PCH</span><span>Pinch — click it</span></div>
-  </div>
-</div>
-
 <script src="data/portfolio-data.js"></script>
-<script src="js/three-bg.js"></script>
 <script src="js/hero.js"></script>
 <script src="js/render.js"></script>
 <script src="js/animations.js"></script>
 <script src="js/contact.js"></script>
 <script src="js/main.js"></script>
-<script src="js/gesture.js"></script>
 
 </body>
 </html>

@@ -26,8 +26,6 @@
   const heroAura     = document.getElementById('hero-aura-svg');
   const scrollInd    = document.querySelector('.scroll-indicator');
   const scanbeam     = document.getElementById('hero-scanbeam');
-  const speedlines   = document.getElementById('hero-speedlines');
-  const hud          = document.getElementById('hero-hud');
   const progFill     = document.getElementById('hero-prog-fill');
 
   if (!hero) return;
@@ -108,11 +106,6 @@
       setTimeout(() => sb.classList.add('sb-active'), 20);
     }
 
-    /* — Speed lines burst — */
-    if (speedlines) {
-      setTimeout(() => speedlines.classList.add('sl-active'), 60);
-    }
-
     /* — Label slides in (from left, letter-spacing expands in) — */
     if (heroLabel) {
       setTimeout(() => {
@@ -148,19 +141,6 @@
       }
     }, 1080);
 
-    /* — HUD tags (left side) — */
-    document.querySelectorAll('.hud-tag').forEach((tag, i) => {
-      setTimeout(() => tag.classList.add('ht-vis'), 1150 + i * 140);
-    });
-
-    /* — HUD stats (right side) + count-up — */
-    document.querySelectorAll('.hud-stat').forEach((stat, i) => {
-      setTimeout(() => {
-        stat.classList.add('hs-vis');
-        const n = stat.querySelector('.hud-n');
-        if (n) countUp(n);
-      }, 1350 + i * 170);
-    });
   }
 
   /* ── Step 5 — Watch for loader removal ────────────────── */
@@ -199,7 +179,6 @@
 
   /* ── Mouse parallax — portrait + HUD depth ────────────── */
   let mx = 0, my = 0;
-  let hudTx = 0, hudTy = 0;
 
   /* ── Tech-layer cursor reveal ──────────────────────────── */
   let revealRaf = null;
@@ -240,17 +219,6 @@
     my = (e.clientY / window.innerHeight - 0.5) * 2;
   });
 
-  // Smoothed HUD parallax via rAF
-  function smoothHud() {
-    if (hud && window.scrollY < 120) {
-      const tx = mx * -6, ty = my * -3;
-      hudTx += (tx - hudTx) * 0.08;
-      hudTy += (ty - hudTy) * 0.08;
-      hud.style.transform = `translate(${hudTx.toFixed(2)}px,${hudTy.toFixed(2)}px)`;
-    }
-    requestAnimationFrame(smoothHud);
-  }
-  smoothHud();
 
   /* ── Periodic name glitch ──────────────────────────────── */
   if (heroName) {
@@ -299,9 +267,6 @@
       heroContent.style.opacity   = op;
       heroContent.style.transform = `translateY(${progress * -55}px)`;
     }
-
-    /* HUD fade on scroll */
-    if (hud) hud.style.opacity = String(Math.max(0, 1 - progress * 4));
 
     /* Vertical progress bar */
     if (progFill) progFill.style.height = (progress * 100).toFixed(1) + '%';

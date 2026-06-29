@@ -158,7 +158,13 @@
         thumbHtml = `
           <div class="project-capstone-vis">
             <canvas class="capstone-canvas" data-id="${p.id}"></canvas>
-            <div class="capstone-icon-overlay">${p.capstoneIcon || '📊'}</div>
+            <div class="capstone-icon-overlay capstone-icon-svg">${
+              p.id === 'walmart_capstone'
+                ? `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="36" height="36"><rect x="3" y="18" width="5" height="11" rx="1"/><rect x="11" y="11" width="5" height="18" rx="1"/><rect x="19" y="6" width="5" height="23" rx="1"/><path d="M4 8l6-5 6 4 8-6" stroke-width="1.8"/><circle cx="4" cy="8" r="1.5" fill="currentColor"/><circle cx="10" cy="3" r="1.5" fill="currentColor"/><circle cx="16" cy="7" r="1.5" fill="currentColor"/><circle cx="24" cy="1" r="1.5" fill="currentColor"/></svg>`
+                : p.id === 'customer_churn'
+                ? `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="36" height="36"><circle cx="16" cy="16" r="12"/><path d="M16 4a12 12 0 0 1 0 24"/><path d="M4 16h24"/><path d="M8 10a14 14 0 0 1 16 0"/><path d="M8 22a14 14 0 0 0 16 0"/></svg>`
+                : `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="36" height="36"><path d="M6 26 Q16 4 26 26"/><path d="M9 20h14"/><circle cx="16" cy="13" r="2" fill="currentColor" stroke="none"/></svg>`
+            }</div>
             <div class="capstone-label">${p.category}</div>
           </div>`;
       } else if (p.heroImage && p.customVis === 'camera') {
@@ -184,11 +190,11 @@
         thumbHtml = `
           <div class="project-thumb${p.thumbFit === 'contain' ? ' project-thumb--contain' : ''}">
             <img src="${p.heroImage}" class="project-thumb-img ${fitCls}" alt="${p.title}" loading="lazy"
-              onerror="this.parentElement.innerHTML='<div class=\\'project-thumb-placeholder\\'><div class=\\'project-thumb-icon\\'>⚙️</div></div>'">
+              onerror="this.parentElement.innerHTML='<div class=\\'project-thumb-placeholder\\'></div>'">
             <span class="project-status-badge ${statusCls}">${p.status}</span>
           </div>`;
       } else {
-        const icon = '📡';
+        const icon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" width="32" height="32"><circle cx="12" cy="12" r="3"/><path d="M7 12a5 5 0 0 1 10 0"/><path d="M3 12a9 9 0 0 1 18 0"/></svg>`;
         thumbHtml = `
           <div class="project-thumb">
             <div class="project-thumb-placeholder"><div class="project-thumb-icon">${icon}</div></div>
@@ -197,13 +203,13 @@
       }
 
       const paperBtn = (!p.isCapstone && p.links.paper)
-        ? `<a href="${p.links.paper}" target="_blank" class="btn-gh">📄 Full Report ↗</a>`
+        ? `<a href="${p.links.paper}" target="_blank" class="btn-gh">Full Report ↗</a>`
         : '';
       const ghBtn = p.links.github
         ? `<a href="${p.links.github}" target="_blank" class="btn-gh">GitHub ↗</a>`
         : '';
       const presBtn = p.links && p.links.presentation
-        ? `<a href="${p.links.presentation}" target="_blank" class="btn-gh">🌐 View Webpage ↗</a>`
+        ? `<a href="${p.links.presentation}" target="_blank" class="btn-gh">View Webpage ↗</a>`
         : '';
 
       const card = document.createElement('div');
@@ -252,7 +258,7 @@
       : '';
 
     const confidentialNote = p.confidential
-      ? `<div class="modal-confidential">🔒 This is active doctoral research. Detailed methodology, implementation specifics, and results are intentionally withheld. Only a high-level overview is shared publicly.</div>`
+      ? `<div class="modal-confidential">Active doctoral research — detailed methodology and results not disclosed publicly. High-level overview only.</div>`
       : '';
 
     const industryNote = p.industryNote
@@ -261,7 +267,7 @@
 
     const capstoneHeader = p.isCapstone
       ? `<div style="padding:32px 48px 0;background:var(--bg-panel);display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border-dim)">
-           <span style="font-size:40px">${p.capstoneIcon || '📊'}</span>
+           <span style="color:var(--accent-purple);opacity:0.85;display:flex"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="38" height="38"><rect x="2" y="16" width="5" height="10" rx="1"/><rect x="10" y="10" width="5" height="16" rx="1"/><rect x="18" y="5" width="5" height="21" rx="1"/></svg></span>
            <div>
              <div style="font-size:10px;letter-spacing:3px;color:var(--accent-purple);text-transform:uppercase;margin-bottom:4px">Capstone Project</div>
              <div style="font-size:13px;color:var(--text-secondary)">${p.category}</div>
@@ -270,13 +276,13 @@
       : '';
 
     const paperLink = (!p.isCapstone && p.links.paper)
-      ? `<a href="${p.links.paper}" target="_blank" class="btn-primary" style="font-size:12px">📄 Download Full Report ↗</a>`
+      ? `<a href="${p.links.paper}" target="_blank" class="btn-primary" style="font-size:12px">Download Full Report ↗</a>`
       : '';
     const ghLink = p.links.github
       ? `<a href="${p.links.github}" target="_blank" class="btn-ghost">View GitHub ↗</a>`
       : '';
     const presLink = p.links && p.links.presentation
-      ? `<a href="${p.links.presentation}" target="_blank" class="btn-ghost">🌐 View Webpage ↗</a>`
+      ? `<a href="${p.links.presentation}" target="_blank" class="btn-ghost">View Webpage ↗</a>`
       : '';
 
     modalContent.innerHTML = `
@@ -336,7 +342,7 @@
     const r = P.research.current;
     const hlHtml = r.highlights.map(h => `<li>${h}</li>`).join('');
     rCard.innerHTML = `
-      <div class="research-badge">🔬 Active Doctoral Research · CSIR-CSIO / AcSIR</div>
+      <div class="research-badge">Active Doctoral Research · CSIR-CSIO / AcSIR</div>
       <h3 class="research-title">${r.title}</h3>
       <div class="research-meta">
         <div class="research-meta-item"><strong>Institution:</strong> ${r.institution}</div>
@@ -347,7 +353,7 @@
       <div class="modal-section-title" style="margin-bottom:14px">Research Highlights</div>
       <ul class="research-highlights">${hlHtml}</ul>
       <div class="research-confidential">
-        🔒 <strong>Note:</strong> This is active, ongoing doctoral research. Detailed methodology, experimental data, and results are not disclosed publicly at this stage.
+        <strong>Note:</strong> This is active, ongoing doctoral research. Detailed methodology, experimental data, and results are not disclosed publicly at this stage.
       </div>`;
   }
 
@@ -391,7 +397,7 @@
 
   async function renderPdfThumb(pdfUrl, container) {
     const lib = window.pdfjsLib;
-    if (!lib) { container.innerHTML = `<div class="cert-thumb-placeholder-icon">📜</div>`; return; }
+    if (!lib) { container.innerHTML = `<div class="cert-thumb-placeholder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" width="32" height="32"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>`; return; }
 
     lib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -424,10 +430,10 @@
       container.appendChild(canvas);
       const ov = document.createElement('div');
       ov.className = 'cert-thumb-overlay';
-      ov.textContent = '🔍 View PDF';
+      ov.textContent = 'View PDF ↗';
       container.appendChild(ov);
     } catch (err) {
-      container.innerHTML = `<div class="cert-thumb-placeholder-icon">📜</div>`;
+      container.innerHTML = `<div class="cert-thumb-placeholder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>`;
     }
   }
 
@@ -488,14 +494,14 @@
       if (primaryPdf && thumbWrap) {
         setTimeout(() => renderPdfThumb(primaryPdf, thumbWrap), 200);
       } else if (thumbWrap) {
-        thumbWrap.innerHTML = `<div class="cert-thumb-placeholder-icon">📜</div>`;
+        thumbWrap.innerHTML = `<div class="cert-thumb-placeholder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>`;
       }
     });
   }
 
   async function renderPdfInModal(pdfUrl, canvasWrap, pageInfoEl, prevBtn, nextBtn) {
     const lib = window.pdfjsLib;
-    if (!lib) { canvasWrap.innerHTML = '<div class="cert-thumb-placeholder-icon" style="font-size:48px;opacity:.3;padding:60px">📜</div>'; return; }
+    if (!lib) { canvasWrap.innerHTML = '<div class="cert-thumb-placeholder-icon" style="opacity:.3;padding:60px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="48" height="48"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>'; return; }
     lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
     canvasWrap.innerHTML = `<div class="cert-thumb-loading" style="padding:60px 0"><div class="cert-thumb-spinner"></div><span>LOADING</span></div>`;
@@ -548,7 +554,7 @@
     if (!pdfs.length) {
       certModalContent.innerHTML = `
         <div class="cert-modal-body">
-          <div class="cert-modal-placeholder">📜</div>
+          <div class="cert-modal-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" style="opacity:.35"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
           <div class="cert-modal-title">${c.title}</div>
           <div class="cert-modal-issuer">${c.issuer}</div>
           <div class="cert-modal-date">${c.date}</div>
