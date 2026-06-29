@@ -29,6 +29,9 @@
 
   if (!hero) return;
 
+  /* ── Kill kenBurns so JS owns all portrait transforms ─── */
+  if (portrait) portrait.style.animation = 'none';
+
   /* ── Step 1 — Set initial hidden state (CSS no longer does this) ── */
   // CSS animations removed from stylesheet — JS owns the full reveal
   [heroLabel, heroRoleWrap, heroTagline, heroCta].forEach(el => {
@@ -172,57 +175,12 @@
   setInterval(cycleRole, 2800);
 
   /* ── Mouse parallax — portrait + HUD depth ────────────── */
-  let mx = 0, my = 0, rawX = 0, rawY = 0;
+  let mx = 0, my = 0;
   let hudTx = 0, hudTy = 0;
 
-  /* ── Sunglasses cursor interaction ────────────────────── */
-  const sgEl   = document.getElementById('hero-sunglasses');
-  const sgWrap = document.getElementById('hero-sunglass-layer');
-  let sgVisible = false;
-
-  function positionSunglasses(clientX, clientY) {
-    if (!sgEl || !portrait) return;
-
-    const wrap = portrait.closest('.hero-portrait-wrap') || portrait.parentElement;
-    const rect = wrap.getBoundingClientRect();
-
-    // Normalise cursor position within the portrait wrap (0–1)
-    const rx = (clientX - rect.left)  / rect.width;
-    const ry = (clientY - rect.top)   / rect.height;
-
-    // Eyes sit roughly 28–42% down the portrait and 25–75% wide
-    const nearEyes = rx > 0.22 && rx < 0.78 && ry > 0.24 && ry < 0.46;
-
-    if (nearEyes) {
-      // Map sunglasses centre to cursor, clamped
-      const sgW = rect.width  * 0.52;   // sunglasses ~52% of portrait width
-      const sgH = sgW * (120 / 400);    // maintain SVG aspect ratio
-      const cx  = rect.left + rect.width  * 0.50;  // portrait horizontal centre
-      const cy  = rect.top  + rect.height * 0.355; // eye-level anchor (fixed)
-
-      // Slight cursor-follow within a small radius so they feel alive
-      const followX = (clientX - cx) * 0.08;
-      const followY = (clientY - cy) * 0.06;
-
-      const left = cx - sgW / 2 + followX - rect.left;
-      const top  = cy - sgH / 2 + followY - rect.top;
-
-      sgEl.style.left   = left.toFixed(1) + 'px';
-      sgEl.style.top    = top.toFixed(1)  + 'px';
-      sgEl.style.width  = sgW.toFixed(1)  + 'px';
-      sgEl.style.height = sgH.toFixed(1)  + 'px';
-
-      if (!sgVisible) { sgEl.style.opacity = '1'; sgVisible = true; }
-    } else {
-      if (sgVisible) { sgEl.style.opacity = '0'; sgVisible = false; }
-    }
-  }
-
   document.addEventListener('mousemove', e => {
-    rawX = e.clientX; rawY = e.clientY;
     mx = (e.clientX / window.innerWidth  - 0.5) * 2; // −1 … +1
     my = (e.clientY / window.innerHeight - 0.5) * 2;
-    if (window.scrollY < window.innerHeight * 0.7) positionSunglasses(e.clientX, e.clientY);
   });
 
   // Smoothed HUD parallax via rAF
@@ -262,12 +220,10 @@
     if (portrait) {
       const tx = scrollY < 60 ? mx * 9 : 0;
       const ty = scrollY * 0.18 + (scrollY < 60 ? my * 5 : 0);
-      // Zoom out from 1 → 0.82 over the first viewport height of scroll
+      // Zoom out from 1 → 0.82 as hero scrolls away
       const zoomOut = Math.max(0.82, 1 - progress * 0.18);
-      // Slight downward drift as it shrinks (cinematic pull-back)
       const drift = progress * 40;
       portrait.style.transform = `translate(${tx}px, ${ty + drift}px) scale(${zoomOut})`;
-      // Fade portrait slightly as it zooms out for depth
       portrait.style.filter = `brightness(${Math.max(0.55, 0.80 - progress * 0.35)}) saturate(${Math.max(0.7, 1.08 - progress * 0.5)}) contrast(1.04)`;
     }
 
