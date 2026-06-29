@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  const SCROLL_SPEED   = 14;
+  const SCROLL_SPEED   = 22;
   const NAV_COOLDOWN   = 1100;
   const PINCH_THRESH   = 0.055;
   const PINCH_FRAMES   = 3;    // consecutive frames before pinch fires
@@ -17,6 +17,7 @@
   let lastTab      = 0;
   let prevGesture  = null;
   let scrollDir    = 0;
+  let scrollVel    = 0;   // momentum velocity
   let rafScroll    = null;
   let pinchFrames  = 0;   // consecutive pinch frames counter
   let tabDirty     = true; // rebuild tab list only when needed
@@ -38,7 +39,7 @@
 
   // ── Start / Stop ──────────────────────────────────────────
   async function start() {
-    toggle.querySelector('.gest-icon').textContent = '⏳';
+    toggle.style.opacity = '0.5';
     try {
       await loadScripts([
         'https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js',
@@ -47,14 +48,15 @@
       await initMediaPipe();
     } catch (e) {
       console.warn('Gesture nav failed:', e);
-      toggle.querySelector('.gest-icon').textContent = '✋';
+      toggle.style.opacity = '';
       setLabel('Camera access denied', 3000);
     }
   }
 
   function stop() {
     enabled = false;
-    stopScrollRaf();
+    scrollDir = 0; scrollVel = 0;
+    if (rafScroll) { cancelAnimationFrame(rafScroll); rafScroll = null; }
     if (mpCamera) { try { mpCamera.stop(); } catch (_) {} mpCamera = null; }
     if (mpHands)  { try { mpHands.close();  } catch (_) {} mpHands  = null; }
     if (preview.srcObject) {
@@ -64,7 +66,6 @@
     clearGestureFocus();
     panel.classList.remove('visible');
     toggle.classList.remove('active');
-    toggle.querySelector('.gest-icon').textContent = '✋';
   }
 
   function loadScripts(urls) {
@@ -102,8 +103,8 @@
     mpCamera.start();
 
     enabled = true;
+    toggle.style.opacity = '';
     toggle.classList.add('active');
-    toggle.querySelector('.gest-icon').textContent = '✋';
     panel.classList.add('visible');
     showLegend();
   }
@@ -134,58 +135,55 @@
 
       case 'OPEN_PALM':
         scrollDir = 1; startScrollRaf();
-        setLabel('🖐️  Scroll Down');
+        setLabel('PALM  ·  Scroll Down');
         break;
 
       case 'THUMBS_UP':
         scrollDir = -1; startScrollRaf();
-        setLabel('👍  Scroll Up');
+        setLabel('THUMB  ·  Scroll Up');
         break;
 
       case 'FIST':
-        scrollDir = 0; stopScrollRaf();
-        setLabel('✊  Stop');
+        scrollDir = 0;
+        setLabel('FIST  ·  Stop');
         break;
 
       case 'VICTORY':
-        scrollDir = 0; stopScrollRaf();
+        scrollDir = 0;
         if (now - lastNav > NAV_COOLDOWN) {
           const name = jumpSection(1);
-          setLabel(`✌️  → ${name}`, 1200);
+          setLabel(`V  ·  → ${name}`, 1200);
           lastNav = now;
         }
         break;
 
       case 'THREE_FINGERS':
-        scrollDir = 0; stopScrollRaf();
+        scrollDir = 0;
         if (now - lastNav > NAV_COOLDOWN) {
           const name = jumpSection(-1);
-          setLabel(`🤟  ← ${name}`, 1200);
+          setLabel(`3  ·  ← ${name}`, 1200);
           lastNav = now;
         }
         break;
 
       case 'POINT':
-        scrollDir = 0; stopScrollRaf();
+        scrollDir = 0;
         if (now - lastTab > TAB_COOLDOWN) {
-          // Rebuild tab list only when entering POINT fresh
           if (tabDirty) { refreshTabList(); tabDirty = false; }
           cycleTab(1);
-          setLabel('☝️  Focus Next');
+          setLabel('PTR  ·  Focus Next');
           lastTab = now;
         }
         break;
 
       case 'PINCH':
-        scrollDir = 0; stopScrollRaf();
-        // Require PINCH_FRAMES consecutive frames + cooldown to fire
+        scrollDir = 0;
         if (pinchFrames === PINCH_FRAMES && now - lastPinch > PINCH_COOLDOWN) {
           smartAction(now);
           lastPinch = now;
-          // Lockout tab for a moment too so we don't accidentally re-tab
           lastTab = now;
         } else if (pinchFrames < PINCH_FRAMES) {
-          setLabel('🤏  Hold…');
+          setLabel('PCH  ·  Hold…');
         }
         break;
 
@@ -216,18 +214,26 @@
     return null;
   }
 
-  // ── Scroll RAF ────────────────────────────────────────────
+  // ── Scroll RAF — smooth momentum ─────────────────────────
   function startScrollRaf() {
     if (rafScroll) return;
     (function tick() {
-      if (scrollDir !== 0) {
-        window.scrollBy(0, scrollDir * SCROLL_SPEED);
+      // Ramp velocity toward target speed for buttery feel
+      const target = scrollDir * SCROLL_SPEED;
+      scrollVel += (target - scrollVel) * 0.18;
+      if (Math.abs(scrollVel) > 0.5 || scrollDir !== 0) {
+        window.scrollBy(0, scrollVel);
         rafScroll = requestAnimationFrame(tick);
-      } else { rafScroll = null; }
+      } else {
+        scrollVel = 0;
+        rafScroll = null;
+      }
     })();
   }
   function stopScrollRaf() {
-    if (rafScroll) { cancelAnimationFrame(rafScroll); rafScroll = null; }
+    // Let momentum decay naturally rather than hard-stop
+    scrollDir = 0;
+    // RAF loop will self-terminate once velocity decays
   }
 
   // ── Section jump ──────────────────────────────────────────
@@ -306,14 +312,14 @@
   // ── Legend ────────────────────────────────────────────────
   function showLegend() {
     if (!hint) return;
-    hint.innerHTML = `<div style="font-size:10.5px;line-height:1.8;color:rgba(0,200,255,.88);font-family:'JetBrains Mono',monospace;padding:4px 0">
-      🖐️ Palm → Scroll Down<br>
-      👍 Thumb Up → Scroll Up<br>
-      ✊ Fist → Stop<br>
-      ✌️ Victory → Next Section<br>
-      🤟 3 Fingers → Prev Section<br>
-      ☝️ Point → Highlight Item<br>
-      🤏 Pinch (hold) → Open / Close
+    hint.innerHTML = `<div style="font-size:9.5px;line-height:1.9;color:rgba(0,200,255,.88);font-family:'JetBrains Mono',monospace;padding:4px 0">
+      PALM → Scroll Down<br>
+      THUMB → Scroll Up<br>
+      FIST → Stop<br>
+      V → Next Section<br>
+      3-FIN → Prev Section<br>
+      PTR → Highlight Item<br>
+      PCH (hold) → Open / Close
     </div>`;
     hint.style.opacity = '1';
     setTimeout(() => { hint.style.opacity = '0'; }, 10000);

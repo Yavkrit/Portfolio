@@ -39,4 +39,35 @@
     });
   }, 500);
 
+  // ── YV LOGO → scroll to contact ──────────────────────────
+  const navBrand = document.getElementById('nav-brand');
+  if (navBrand) {
+    navBrand.addEventListener('click', () => {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  // ── THEME TOGGLE (Dark / Light) ───────────────────────────
+  const themeToggle = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+
+  function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    try { localStorage.setItem('yv-theme', theme); } catch (_) {}
+  }
+
+  // Restore saved preference or system preference
+  const savedTheme = (() => {
+    try { return localStorage.getItem('yv-theme'); } catch (_) { return null; }
+  })();
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme');
+      applyTheme(current === 'light' ? 'dark' : 'light');
+    });
+  }
+
 })();

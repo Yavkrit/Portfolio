@@ -15,7 +15,7 @@
     P.education.forEach(e => {
       eduWrap.innerHTML += `
         <div class="edu-item">
-          <div class="edu-icon">🎓</div>
+          <div class="edu-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M10 2L2 7l8 5 8-5-8-5z"/><path d="M2 7v6"/><path d="M6 9.5v4a6 6 0 0 0 8 0v-4"/></svg></div>
           <div>
             <div class="edu-degree">${e.degree}</div>
             <div class="edu-inst">${e.institution} · ${e.period}</div>
@@ -35,7 +35,7 @@
     const hlHtml   = (exp.highlights  || []).map(h => `<li class="exp-detail-hl">${h}</li>`).join('');
     const clients  = exp.clients ? `<div class="exp-detail-clients"><strong>Key Clients:</strong> ${exp.clients.join(' · ')}</div>` : '';
     const sup      = exp.supervisor ? `<div class="exp-detail-clients"><strong>Supervisor:</strong> ${exp.supervisor}</div>` : '';
-    const note     = exp.note ? `<div class="exp-detail-note">🔒 ${exp.note}</div>` : '';
+    const note     = exp.note ? `<div class="exp-detail-note"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="11" height="11" style="display:inline;vertical-align:middle;margin-right:4px"><rect x="2" y="6" width="10" height="7" rx="1.5"/><path d="M4.5 6V4a2.5 2.5 0 0 1 5 0v2"/></svg>${exp.note}</div>` : '';
 
     detailPanel.innerHTML = `
       <div class="exp-detail-card">
@@ -44,7 +44,7 @@
           <div class="exp-detail-company">${exp.company}</div>
           <div class="exp-detail-meta">
             <span class="exp-detail-period">${exp.period}</span>
-            <span class="exp-detail-loc">📍 ${exp.location}</span>
+            <span class="exp-detail-loc"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="11" height="11" style="display:inline;vertical-align:middle;margin-right:3px"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.5 4 8 4 8s4-4.5 4-8c0-2.21-1.79-4-4-4z"/><circle cx="7" cy="5" r="1.5"/></svg>${exp.location}</span>
             <span class="exp-detail-badge ${exp.type}">${exp.type}</span>
           </div>
         </div>

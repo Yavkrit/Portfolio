@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "portfolio",
-      "runtimeExecutable": "python",
+      "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server"],
       "port": 3001,
       "autoPort": true

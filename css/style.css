@@ -1451,5 +1451,193 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
   transition: outline 0.15s, box-shadow 0.15s;
 }
 
-/* Update hint with new gestures */
+/* ── Hint label pill (replaces emoji glyphs) ─────────── */
+.hint-label {
+  font-size: 7.5px !important;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: rgba(0,180,255,0.12);
+  border: 1px solid rgba(0,180,255,0.3);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--accent-blue) !important;
+  min-width: 30px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ── Chip icon SVG sizing ─────────────────────────── */
+.chip-icon {
+  width: 15px; height: 15px;
+  flex-shrink: 0;
+  color: var(--accent-blue);
+  stroke: currentColor;
+}
+
+/* ── Nav brand as button ──────────────────────────── */
+.nav-brand {
+  background: none; border: none;
+  cursor: none;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0;
+}
+.nav-brand:hover .nav-initials { opacity: 0.8; }
+
+/* ══════════════════════════════════════════════════════════
+   THEME TOGGLE BUTTON (Sun / Moon)
+══════════════════════════════════════════════════════════ */
+.theme-toggle-btn {
+  background: rgba(0,180,255,0.06);
+  border: 1px solid rgba(0,180,255,0.2);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.theme-toggle-btn:hover {
+  background: rgba(0,180,255,0.14);
+  border-color: rgba(0,180,255,0.5);
+  color: var(--text-primary);
+  transform: scale(1.05);
+}
+.theme-toggle-btn svg {
+  width: 16px; height: 16px;
+  position: absolute;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.icon-sun  { opacity: 1;  transform: rotate(0deg)   scale(1); }
+.icon-moon { opacity: 0;  transform: rotate(-90deg) scale(0.6); }
+
+/* Light mode: swap icons */
+[data-theme="light"] .icon-sun  { opacity: 0; transform: rotate(90deg)  scale(0.6); }
+[data-theme="light"] .icon-moon { opacity: 1; transform: rotate(0deg)   scale(1); }
+
+/* ══════════════════════════════════════════════════════════
+   LIGHT MODE — CSS variable overrides
+══════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg-void:    #f0f4f8;
+  --bg-deep:    #e2eaf4;
+  --bg-card:    #ffffff;
+  --bg-panel:   #f5f8fc;
+  --bg-glass:   rgba(255,255,255,0.88);
+
+  --accent-blue:   #006db3;
+  --accent-orange: #c94f18;
+  --accent-purple: #8b3fd1;
+  --accent-green:  #0d9467;
+  --accent-gold:   #c87d08;
+
+  --text-primary:   #0c1825;
+  --text-secondary: #3d5e7a;
+  --text-muted:     #7a9bb5;
+
+  --border-dim:  rgba(0,109,179,0.12);
+  --border-glow: rgba(0,109,179,0.38);
+
+  --glow-blue:   0 0 20px rgba(0,109,179,0.3), 0 0 60px rgba(0,109,179,0.08);
+  --glow-orange: 0 0 20px rgba(201,79,24,0.3);
+}
+
+/* Light mode: specific overrides */
+[data-theme="light"] body { background: var(--bg-void); color: var(--text-primary); }
+[data-theme="light"] #nav.scrolled { background: rgba(240,244,248,0.92); }
+[data-theme="light"] .mobile-menu { background: rgba(240,244,248,0.97); }
+[data-theme="light"] #loader { background: var(--bg-void); }
+[data-theme="light"] ::-webkit-scrollbar-track { background: var(--bg-void); }
+[data-theme="light"] #cursor { background: var(--accent-blue); }
+[data-theme="light"] #cursor-follower { border-color: rgba(0,109,179,0.5); }
+[data-theme="light"] .hero-overlay-bottom {
+  background: linear-gradient(to top, rgba(240,244,248,1) 0%, rgba(240,244,248,0.75) 30%, rgba(240,244,248,0.2) 60%, transparent 100%);
+}
+[data-theme="light"] .hero-overlay-sides {
+  background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(240,244,248,0.55) 100%);
+}
+[data-theme="light"] .hero-vignette {
+  background: linear-gradient(to bottom, rgba(240,244,248,0.5), transparent);
+}
+[data-theme="light"] .hero-aurora {
+  background:
+    radial-gradient(ellipse 80% 40% at 20% 60%, rgba(0,109,179,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 30% at 80% 30%, rgba(139,63,209,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 25% at 50% 80%, rgba(201,79,24,0.05) 0%, transparent 50%);
+}
+[data-theme="light"] .hero-scanlines {
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.012) 3px, rgba(0,0,0,0.012) 4px);
+}
+[data-theme="light"] .section { background: var(--bg-void); }
+[data-theme="light"] .section-dark { background: var(--bg-deep); }
+[data-theme="light"] .exp-detail-card,
+[data-theme="light"] .stat-card,
+[data-theme="light"] .project-card,
+[data-theme="light"] .highlight-chip,
+[data-theme="light"] .cert-card,
+[data-theme="light"] .research-hero-card,
+[data-theme="light"] .skills-group,
+[data-theme="light"] .contact-card { background: var(--bg-card); }
+[data-theme="light"] .gesture-panel { background: rgba(240,244,248,0.95); }
+[data-theme="light"] .modal-container { background: var(--bg-card); }
+[data-theme="light"] input,
+[data-theme="light"] textarea {
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border-color: var(--border-dim);
+}
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder { color: var(--text-muted); }
+[data-theme="light"] .tech-tag { background: var(--bg-panel); }
+
+/* Light mode: smooth transition for all themed elements */
+body, #nav, .section, .section-dark, .stat-card, .highlight-chip,
+.exp-detail-card, .project-card, .cert-card, .skills-group, .contact-card,
+.gesture-panel, .modal-container, input, textarea, .tech-tag {
+  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PERFORMANCE — GPU composite layers
+══════════════════════════════════════════════════════════ */
+.hero-aurora        { will-change: opacity; transform: translateZ(0); }
+.hero-portrait-glow { transform: translateZ(0); }
+.hero-aura-svg      { will-change: transform; }
+.hero-streaks       { transform: translateZ(0); }
+.hero-scanlines     { transform: translateZ(0); }
+#hero-canvas        { transform: translateZ(0); }
+
+/* Reduce aura SVG paint area */
+.aura-halo-glow  { paint-order: stroke; }
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE HERO — prevent stretching / distortion
+══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .hero-portrait-img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    object-position: center top;
+  }
+  /* Tighten bottom gradient on mobile so face shows clearly */
+  .hero-overlay-bottom {
+    height: 55%;
+  }
+  /* Hide the aura SVG on small screens — performance win */
+  .hero-aura-svg { display: none; }
+  /* Also hide streaks on mobile */
+  .hero-streaks { display: none; }
+}
+
+@media (max-width: 480px) {
+  .hero-portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+  }
+}
 

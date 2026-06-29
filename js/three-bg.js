@@ -4,7 +4,7 @@
   if (!canvas || typeof THREE === 'undefined') return;
 
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.0));
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   const scene  = new THREE.Scene();
@@ -12,7 +12,7 @@
   camera.position.z = 5;
 
   // ── Particle field — 3 layers at different depths ────────
-  const COUNTS  = [1400, 800, 400]; // near, mid, far
+  const COUNTS  = [700, 400, 200]; // near, mid, far — halved for performance
   const SPREADS = [22, 30, 40];
   const DEPTHS  = [8, 14, 20];
   const SIZES   = [0.05, 0.035, 0.022];
