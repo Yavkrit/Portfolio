@@ -23,6 +23,7 @@
   const portrait     = document.getElementById('hero-portrait-main');
   const portraitTech = document.getElementById('hero-portrait-tech');
   const portraitWrap = document.getElementById('hero-portrait-wrap');
+  const heroAura     = document.getElementById('hero-aura-svg');
   const scrollInd    = document.querySelector('.scroll-indicator');
   const scanbeam     = document.getElementById('hero-scanbeam');
   const speedlines   = document.getElementById('hero-speedlines');
@@ -44,8 +45,9 @@
     fillScale  = Math.max(1, (vpW / imgW) * 1.02); // 2% overshoot avoids gap
     // Apply immediately so there's no flash of un-zoomed image
     const base = `translateX(-50%) scale(${fillScale})`;
-    portrait.style.transform = base;
+    portrait.style.transform     = base;
     if (portraitTech) portraitTech.style.transform = base;
+    if (heroAura)     heroAura.style.transform      = base;
   }
 
   if (portrait) {
@@ -287,6 +289,7 @@
       portrait.style.transform = t;
       portrait.style.filter    = f;
       if (portraitTech) { portraitTech.style.transform = t; portraitTech.style.filter = f; }
+      if (heroAura)     { heroAura.style.transform = t; }
     }
 
     /* Hero text parallax fade */

@@ -95,6 +95,51 @@
            alt="" class="hero-portrait-img hero-portrait-tech" aria-hidden="true">
       <!-- Neon edge glow -->
       <div class="hero-portrait-glow" id="hero-portrait-glow"></div>
+
+      <!-- Futuristic aura SVG — halo ring + body lines -->
+      <svg id="hero-aura-svg" class="hero-aura-svg"
+           viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg"
+           preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+
+        <!-- ░░ HALO RINGS ░░ -->
+        <!-- Soft glow behind main halo (thick, blurred via filter) -->
+        <ellipse class="aura-halo-glow"  cx="200" cy="110" rx="76" ry="21"/>
+        <!-- Main halo ring -->
+        <ellipse class="aura-halo-main"  cx="200" cy="110" rx="76" ry="21"/>
+        <!-- Chasing light arc on main halo -->
+        <ellipse class="aura-halo-chase" cx="200" cy="110" rx="76" ry="21"/>
+        <!-- Inner halo (smaller, tighter) -->
+        <ellipse class="aura-halo-inner" cx="200" cy="110" rx="52" ry="14"/>
+        <!-- Outer orbit ring -->
+        <ellipse class="aura-orbit-out"  cx="200" cy="110" rx="102" ry="29"/>
+        <!-- Chasing arc on outer ring -->
+        <ellipse class="aura-orbit-chase" cx="200" cy="110" rx="102" ry="29"/>
+
+        <!-- ░░ HALO DATA NODES ░░ -->
+        <circle class="aura-node-dot" cx="276" cy="110" r="3.5"/>
+        <circle class="aura-node-dot" cx="124" cy="110" r="3.5"/>
+        <circle class="aura-node-dot delay1" cx="200" cy="89"  r="2.5"/>
+        <circle class="aura-node-dot delay2" cx="200" cy="131" r="2.5"/>
+
+        <!-- ░░ CORNER HUD BRACKETS ░░ -->
+        <path class="aura-corner" d="M100 92 L68 92 L68 136"/>
+        <path class="aura-corner" d="M300 92 L332 92 L332 136"/>
+
+        <!-- ░░ BODY SIDE LINES ░░ -->
+        <line class="aura-side-line" x1="80"  y1="168" x2="72"  y2="540"/>
+        <line class="aura-side-line" x1="320" y1="168" x2="328" y2="540"/>
+        <!-- Side line end caps -->
+        <circle class="aura-node-dot delay3" cx="72"  cy="540" r="3"/>
+        <circle class="aura-node-dot delay3" cx="328" cy="540" r="3"/>
+
+        <!-- ░░ SCAN LINE ░░ -->
+        <line class="aura-scan-line" x1="78" y1="0" x2="322" y2="0"/>
+        <!-- Scan end nodes -->
+        <circle class="aura-scan-node" cx="78"  cy="0" r="3.5"/>
+        <circle class="aura-scan-node" cx="322" cy="0" r="3.5"/>
+
+
+      </svg>
       <div class="hero-overlay-bottom"></div>
       <div class="hero-overlay-sides"></div>
     </div>
