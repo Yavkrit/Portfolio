@@ -21,6 +21,8 @@
   const heroCta      = document.getElementById('hero-cta');
   const roleCycle    = document.getElementById('role-cycle');
   const portrait     = document.getElementById('hero-portrait-main');
+  const portraitTech = document.getElementById('hero-portrait-tech');
+  const portraitWrap = document.getElementById('hero-portrait-wrap');
   const scrollInd    = document.querySelector('.scroll-indicator');
   const scanbeam     = document.getElementById('hero-scanbeam');
   const speedlines   = document.getElementById('hero-speedlines');
@@ -29,8 +31,27 @@
 
   if (!hero) return;
 
-  /* ── Kill kenBurns so JS owns all portrait transforms ─── */
-  if (portrait) portrait.style.animation = 'none';
+  /* ── Compute scale needed to fill viewport width ────────
+     Images are now height:100% width:auto (natural ratio).
+     fillScale zooms them up so they cover the viewport at rest,
+     then JS unwinds this to 1.0 as the user scrolls.            */
+  let fillScale = 1.6; // safe fallback until image loads
+
+  function computeFillScale() {
+    if (!portrait || !portrait.offsetWidth) return;
+    const vpW  = hero.offsetWidth;
+    const imgW = portrait.offsetWidth; // displayed width at height:100%
+    fillScale  = Math.max(1, (vpW / imgW) * 1.02); // 2% overshoot avoids gap
+    // Apply immediately so there's no flash of un-zoomed image
+    const base = `translateX(-50%) scale(${fillScale})`;
+    portrait.style.transform = base;
+    if (portraitTech) portraitTech.style.transform = base;
+  }
+
+  if (portrait) {
+    if (portrait.complete) computeFillScale();
+    else portrait.addEventListener('load', computeFillScale);
+  }
 
   /* ── Step 1 — Set initial hidden state (CSS no longer does this) ── */
   // CSS animations removed from stylesheet — JS owns the full reveal
@@ -178,6 +199,39 @@
   let mx = 0, my = 0;
   let hudTx = 0, hudTy = 0;
 
+  /* ── Tech-layer cursor reveal ──────────────────────────── */
+  let revealRaf = null;
+
+  function updateReveal(clientX, clientY) {
+    if (!portraitTech || !portraitWrap) return;
+    const rect = portraitWrap.getBoundingClientRect();
+    const px = ((clientX - rect.left) / rect.width  * 100).toFixed(2);
+    const py = ((clientY - rect.top)  / rect.height * 100).toFixed(2);
+    const r  = Math.min(rect.width, rect.height) * 0.30; // ~30% of smaller dimension
+    const mask = `radial-gradient(circle ${r.toFixed(0)}px at ${px}% ${py}%, black 0%, black 45%, transparent 75%)`;
+    portraitTech.style.webkitMaskImage = mask;
+    portraitTech.style.maskImage       = mask;
+  }
+
+  function onTechLeave() {
+    if (!portraitTech) return;
+    const mask = 'radial-gradient(circle 0px at 50% 50%, black 0%, transparent 0%)';
+    portraitTech.style.webkitMaskImage = mask;
+    portraitTech.style.maskImage       = mask;
+  }
+
+  if (portraitWrap) {
+    portraitWrap.addEventListener('mousemove', e => {
+      if (revealRaf) return;
+      revealRaf = requestAnimationFrame(() => {
+        updateReveal(e.clientX, e.clientY);
+        revealRaf = null;
+      });
+    }, { passive: true });
+
+    portraitWrap.addEventListener('mouseleave', onTechLeave, { passive: true });
+  }
+
   document.addEventListener('mousemove', e => {
     mx = (e.clientX / window.innerWidth  - 0.5) * 2; // −1 … +1
     my = (e.clientY / window.innerHeight - 0.5) * 2;
@@ -216,15 +270,23 @@
     /* Scroll indicator */
     if (scrollInd) scrollInd.style.opacity = scrollY < 80 ? '1' : '0';
 
-    /* Portrait — cinematic zoom-out on scroll */
+    /* Portrait — zoom out from fillScale → 1.0 revealing full portrait */
     if (portrait) {
       const tx = scrollY < 60 ? mx * 9 : 0;
-      const ty = scrollY * 0.18 + (scrollY < 60 ? my * 5 : 0);
-      // Zoom out from 1 → 0.82 as hero scrolls away
-      const zoomOut = Math.max(0.82, 1 - progress * 0.18);
-      const drift = progress * 40;
-      portrait.style.transform = `translate(${tx}px, ${ty + drift}px) scale(${zoomOut})`;
-      portrait.style.filter = `brightness(${Math.max(0.55, 0.80 - progress * 0.35)}) saturate(${Math.max(0.7, 1.08 - progress * 0.5)}) contrast(1.04)`;
+      const ty = scrollY * 0.12 + (scrollY < 60 ? my * 4 : 0);
+
+      // Ease: fillScale at progress=0, reaches 1.0 around progress=0.6
+      const ease = Math.min(1, progress * 1.7);
+      const smoothEase = ease < 0.5
+        ? 2 * ease * ease
+        : 1 - Math.pow(-2 * ease + 2, 2) / 2; // ease-in-out quad
+      const sc = fillScale - (fillScale - 1) * smoothEase;
+
+      const t = `translateX(-50%) translate(${tx}px, ${ty}px) scale(${sc})`;
+      const f = `brightness(${Math.max(0.65, 0.80 - progress * 0.18)}) saturate(${Math.max(0.85, 1.08 - progress * 0.25)}) contrast(1.04)`;
+      portrait.style.transform = t;
+      portrait.style.filter    = f;
+      if (portraitTech) { portraitTech.style.transform = t; portraitTech.style.filter = f; }
     }
 
     /* Hero text parallax fade */
@@ -242,5 +304,6 @@
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', computeFillScale, { passive: true });
   onScroll();
 })();

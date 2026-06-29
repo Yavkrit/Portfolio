@@ -86,10 +86,16 @@
     <div class="hero-scanlines"></div>
 
     <!-- Portrait -->
-    <div class="hero-portrait-wrap">
+    <div class="hero-portrait-wrap" id="hero-portrait-wrap">
+      <!-- Base: clean portrait -->
       <img id="hero-portrait-main" src="images/portrait_1.png"
            alt="Yavkrit Vashishtha" class="hero-portrait-img">
-<div class="hero-overlay-bottom"></div>
+      <!-- Tech layer: revealed on cursor hover -->
+      <img id="hero-portrait-tech" src="images/portrait_tech.png.png"
+           alt="" class="hero-portrait-img hero-portrait-tech" aria-hidden="true">
+      <!-- Neon edge glow -->
+      <div class="hero-portrait-glow" id="hero-portrait-glow"></div>
+      <div class="hero-overlay-bottom"></div>
       <div class="hero-overlay-sides"></div>
     </div>
 

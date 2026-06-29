@@ -176,15 +176,14 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
   overflow: hidden;
 }
 
-/* The portrait itself — covers the full viewport */
+/* The portrait itself — natural height, centered, JS scales to cover on load */
 .hero-portrait-img {
-  width: 100%;
+  position: absolute;
   height: 100%;
-  object-fit: cover;
-  /* Show upper body — not just face */
-  object-position: center 32%;
+  width: auto;
+  top: 0;
+  left: 50%;
   transform-origin: center 35%;
-  animation: kenBurns 20s ease-in-out infinite alternate;
   filter: brightness(.80) saturate(1.08) contrast(1.04);
   will-change: transform;
 }
@@ -192,6 +191,43 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
 @keyframes kenBurns {
   0%   { transform: scale(1.0) translateY(0px); }
   100% { transform: scale(1.05) translateY(-12px); }
+}
+
+/* ── Tech portrait layer (cursor-reveal) ─────────────── */
+.hero-portrait-tech {
+  -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 0%);
+  mask-image: radial-gradient(circle 0px at 50% 50%, black 0%, transparent 0%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* ── Neon portrait edge glow ─────────────────────────── */
+.hero-portrait-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: transparent;
+  /* Inward neon glow from edges */
+  box-shadow:
+    inset 0 0 60px 8px rgba(0,180,255,0.08),
+    inset 0 0 120px 20px rgba(0,180,255,0.04);
+}
+.hero-portrait-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right,  rgba(0,180,255,0.07) 0%, transparent 18%),
+    linear-gradient(to left,   rgba(0,180,255,0.05) 0%, transparent 18%),
+    linear-gradient(to bottom, rgba(0,180,255,0.06) 0%, transparent 22%);
+  pointer-events: none;
+  animation: glowPulse 4s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1.0; }
 }
 
 /* Bottom gradient — darkens so text reads clearly */
