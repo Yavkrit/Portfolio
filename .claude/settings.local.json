@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Yavkrit Vashishtha/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/7cb1c882-d70a-4f84-b158-cc6428815ada/d7b7bf7f-6a1f-4326-a0e1-7088ef80994b/skills/docx/**)",
+      "Bash(python scripts/office/unpack.py \"C:\\\\Users\\\\Yavkrit Vashishtha\\\\Downloads\\\\DAC_1\\\\DAC_1\\\\DAC1_Report_Yavkrit.docx\" \"C:\\\\Users\\\\Yavkrit Vashishtha\\\\Downloads\\\\DAC_1\\\\DAC_1\\\\unpacked_resume\")",
+      "Bash(py --version)",
+      "PowerShell(Get-Command python -ErrorAction SilentlyContinue)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(start \"\" \"C:\\\\Users\\\\Yavkrit Vashishtha\\\\Downloads\\\\Portfolio\\\\index.html\")",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
+    ]
+  }
+}

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yavkrit Vashishtha — Embedded Software Engineer & Research Scholar</title>
+<meta name="description" content="Portfolio of Yavkrit Vashishtha — Embedded Software Engineer & PhD Scholar at CSIR-CSIO. Expert in firmware, ONVIF, Linux, THz imaging, and AI.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Three.js for hero particle background -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- PDF.js for certificate thumbnail rendering -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ══ LOADER ══════════════════════════════════════════════ -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="loader-ring"></div>
+    <div class="loader-text">
+      <span class="loader-name">YV</span>
+      <span class="loader-status">Initializing Experience</span>
+    </div>
+  </div>
+  <div class="loader-progress-bar"><div id="loader-bar"></div></div>
+</div>
+
+<!-- ══ CURSOR ══════════════════════════════════════════════ -->
+<div id="cursor"></div>
+<div id="cursor-follower"></div>
+
+<!-- ══ NAV ═════════════════════════════════════════════════ -->
+<nav id="nav">
+  <div class="nav-brand">
+    <span class="nav-initials">YV</span>
+    <span class="nav-dot"></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about" data-nav>About</a></li>
+    <li><a href="#experience" data-nav>Experience</a></li>
+    <li><a href="#projects" data-nav>Projects</a></li>
+    <li><a href="#research" data-nav>Research</a></li>
+    <li><a href="#skills" data-nav>Skills</a></li>
+    <li><a href="#certificates" data-nav>Certifications</a></li>
+    <li><a href="#contact" data-nav>Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button id="gesture-toggle" class="gesture-toggle-btn" title="Enable gesture navigation" aria-label="Toggle gesture navigation">
+      <span class="gest-icon">✋</span>
+    </button>
+    <a href="assets/resume.pdf" target="_blank" class="btn-outline-sm">Resume ↓</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="#about" class="mobile-link">About</a></li>
+    <li><a href="#experience" class="mobile-link">Experience</a></li>
+    <li><a href="#projects" class="mobile-link">Projects</a></li>
+    <li><a href="#research" class="mobile-link">Research</a></li>
+    <li><a href="#skills" class="mobile-link">Skills</a></li>
+    <li><a href="#certificates" class="mobile-link">Certifications</a></li>
+    <li><a href="#contact" class="mobile-link">Contact</a></li>
+  </ul>
+</div>
+
+<!-- ══ HERO ════════════════════════════════════════════════ -->
+<section id="hero">
+  <div id="hero-sticky">
+
+    <!-- Enhanced particle canvas -->
+    <canvas id="hero-canvas"></canvas>
+
+    <!-- Aurora layer -->
+    <div class="hero-aurora"></div>
+
+    <!-- Cinematic portrait — fills screen -->
+    <div class="hero-portrait-wrap">
+      <img
+        id="hero-portrait-main"
+        src="images/portrait_1.png"
+        alt="Yavkrit Vashishtha"
+        class="hero-portrait-img"
+      >
+      <div class="hero-overlay-bottom"></div>
+      <div class="hero-overlay-sides"></div>
+    </div>
+
+    <!-- Vignette -->
+    <div class="hero-vignette"></div>
+
+    <!-- Light streaks -->
+    <div class="hero-streaks">
+      <div class="streak s1"></div>
+      <div class="streak s2"></div>
+      <div class="streak s3"></div>
+    </div>
+
+    <!-- Hero text content -->
+    <div class="hero-content">
+      <div class="hero-label">EMBEDDED ENGINEER · AI RESEARCHER · PHD SCHOLAR</div>
+      <h1 class="hero-name">
+        <span class="hero-first">Yavkrit</span>
+        <span class="hero-last">Vashishtha</span>
+      </h1>
+      <div class="hero-role-wrap">
+        <span class="hero-role-prefix">I build</span>
+        <span class="hero-role-cycle" id="role-cycle">the future</span>
+      </div>
+      <p class="hero-tagline">CSIR-CSIO · Chandigarh · AcSIR New Delhi</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">Explore My Work</a>
+        <a href="#contact" class="btn-ghost">Get In Touch</a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span>SCROLL</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ ABOUT ════════════════════════════════════════════════ -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="section-label">01 / About</div>
+    <h2 class="section-title reveal-text">The Story<br><em>Behind the Engineer</em></h2>
+
+    <div class="about-grid">
+      <div class="about-portrait-col">
+        <div class="about-portrait-frame" id="about-frame">
+          <img src="images/portrait_2.png" alt="Yavkrit Vashishtha" class="about-portrait">
+          <div class="about-portrait-glow"></div>
+          <div class="about-portrait-tag">
+            <span class="tag-role">Research Engineer</span>
+            <span class="tag-loc">📍 Chandigarh, India</span>
+          </div>
+        </div>
+
+        <div class="about-stats">
+          <div class="stat-card"><span class="stat-num">2+</span><span class="stat-label">Years Industry</span></div>
+          <div class="stat-card"><span class="stat-num">8.69</span><span class="stat-label">B.Tech CGPA</span></div>
+          <div class="stat-card"><span class="stat-num">DAC‑1</span><span class="stat-label">PhD Milestone</span></div>
+          <div class="stat-card"><span class="stat-num">6+</span><span class="stat-label">Certifications</span></div>
+        </div>
+      </div>
+
+      <div class="about-content-col">
+        <p class="about-lead">I'm an <strong>Embedded Software Engineer and Research Scholar</strong> with 2+ years of industry experience in firmware development, Linux-based systems, and protocol integration for professional IP camera platforms.</p>
+
+        <p>At <strong>eInfochips (Arrow Electronics)</strong>, I developed production-grade firmware for PTZ and multi-sensor IP cameras, implemented ONVIF/SUNAPI-compliant protocol stacks, built RESTful API integrations, and wrote low-level peripheral drivers on STM32 microcontrollers using Yocto and ARM cross-compilation.</p>
+
+        <p>Now at <strong>CSIR-CSIO, Chandigarh</strong>, I'm pursuing an Integrated M.Tech + Ph.D. at AcSIR, applying AI and deep learning to build novel non-contact biomedical imaging systems using Terahertz radiation — research at the frontier of instrumentation science.</p>
+
+        <div class="about-highlights">
+          <div class="highlight-chip"><span class="chip-icon">⚡</span>Embedded Firmware</div>
+          <div class="highlight-chip"><span class="chip-icon">📡</span>ONVIF / SUNAPI</div>
+          <div class="highlight-chip"><span class="chip-icon">🔬</span>THz Imaging Research</div>
+          <div class="highlight-chip"><span class="chip-icon">🤖</span>AI / Deep Learning</div>
+          <div class="highlight-chip"><span class="chip-icon">🐧</span>Linux / RTOS</div>
+          <div class="highlight-chip"><span class="chip-icon">👁️</span>Computer Vision</div>
+        </div>
+
+        <div class="about-edu" id="about-edu"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIENCE — Split Layout ════════════════════════════ -->
+<section id="experience" class="section section-dark">
+  <div class="container">
+    <div class="section-label">02 / Experience</div>
+    <h2 class="section-title reveal-text">Where I've<br><em>Made an Impact</em></h2>
+    <div class="exp-split" id="exp-split">
+      <!-- Left: nav panel — populated by JS -->
+      <div class="exp-nav-panel" id="exp-nav-panel"></div>
+      <!-- Right: detail panel — populated by JS -->
+      <div class="exp-detail-panel" id="exp-detail-panel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROJECTS ══════════════════════════════════════════════ -->
+<section id="projects" class="section">
+  <div class="container">
+    <div class="section-label">03 / Projects</div>
+    <h2 class="section-title reveal-text">Engineering<br><em>Deep Dives</em></h2>
+    <p class="section-sub">Every project is a complete case study — problem, solution, architecture, outcomes.</p>
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+</section>
+
+<!-- Project Modal -->
+<div id="project-modal" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal-container">
+    <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    <div class="modal-content" id="modal-content"></div>
+  </div>
+</div>
+
+<!-- ══ RESEARCH ══════════════════════════════════════════════ -->
+<section id="research" class="section section-dark">
+  <div class="container">
+    <div class="section-label">04 / Research</div>
+    <h2 class="section-title reveal-text">Doctoral Research<br><em>at CSIR-CSIO</em></h2>
+    <div class="research-hero-card" id="research-hero-card"></div>
+  </div>
+</section>
+
+<!-- ══ SKILLS ════════════════════════════════════════════════ -->
+<section id="skills" class="section">
+  <div class="container">
+    <div class="section-label">05 / Skills</div>
+    <h2 class="section-title reveal-text">Technical<br><em>Arsenal</em></h2>
+    <div class="skills-outer" id="skills-outer"></div>
+  </div>
+</section>
+
+<!-- ══ CERTIFICATES ══════════════════════════════════════════ -->
+<section id="certificates" class="section section-dark">
+  <div class="container">
+    <div class="section-label">06 / Certifications</div>
+    <h2 class="section-title reveal-text">Credentials &<br><em>Certifications</em></h2>
+    <p class="section-sub">Click any certificate to view the full PDF.</p>
+    <div class="certs-grid" id="certs-grid"></div>
+  </div>
+</section>
+
+<!-- Certificate PDF Viewer Modal -->
+<div id="cert-modal" class="modal-overlay">
+  <div class="modal-container cert-modal-inner">
+    <button class="modal-close" id="cert-modal-close">✕</button>
+    <div class="modal-content" id="cert-modal-content"></div>
+  </div>
+</div>
+
+<!-- ══ CONTACT ════════════════════════════════════════════════ -->
+<section id="contact" class="section">
+  <div class="container">
+    <div class="section-label">07 / Contact</div>
+    <h2 class="section-title reveal-text">Let's Build<br><em>Something Great</em></h2>
+    <p class="section-sub">Research collaborations, engineering opportunities, or just a conversation — I'm open to all.</p>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-card">
+          <a href="mailto:yvashishtha04@gmail.com" class="contact-item">
+            <div class="contact-icon">✉️</div>
+            <div><div class="ci-label">Email</div><div class="ci-val">yvashishtha04@gmail.com</div></div>
+          </a>
+          <a href="tel:+916359100188" class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div><div class="ci-label">Phone</div><div class="ci-val">+91 6359100188</div></div>
+          </a>
+          <a href="https://www.linkedin.com/in/yavkrit-vashishtha-50819b286" target="_blank" class="contact-item">
+            <div class="contact-icon">💼</div>
+            <div><div class="ci-label">LinkedIn</div><div class="ci-val">yavkrit-vashishtha</div></div>
+          </a>
+          <a href="https://github.com/Yavkrit" target="_blank" class="contact-item">
+            <div class="contact-icon">🐙</div>
+            <div><div class="ci-label">GitHub</div><div class="ci-val">github.com/Yavkrit</div></div>
+          </a>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div><div class="ci-label">Location</div><div class="ci-val">Chandigarh, India</div></div>
+          </div>
+        </div>
+
+        <a href="assets/resume.pdf" target="_blank" class="resume-download-btn">
+          <span class="rd-icon">↓</span>
+          <span>Download Resume (PDF)</span>
+        </a>
+      </div>
+
+      <div class="contact-form-col">
+        <form id="contact-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f-name">Full Name *</label>
+              <input type="text" id="f-name" name="name" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label for="f-email">Email Address *</label>
+              <input type="email" id="f-email" name="email" placeholder="your@email.com" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="f-subject">Subject *</label>
+            <input type="text" id="f-subject" name="subject" placeholder="Research collaboration / Opportunity / Hello" required>
+          </div>
+          <div class="form-group">
+            <label for="f-message">Message *</label>
+            <textarea id="f-message" name="message" rows="6" placeholder="Tell me about your project, collaboration idea, or opportunity..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary btn-full" id="form-submit">
+            <span id="submit-text">Send Message</span>
+            <span id="submit-loader" style="display:none">Sending…</span>
+          </button>
+          <div id="form-feedback" class="form-feedback"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">YV</div>
+    <div class="footer-links">
+      <a href="https://github.com/Yavkrit" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/yavkrit-vashishtha-50819b286" target="_blank">LinkedIn</a>
+      <a href="mailto:yvashishtha04@gmail.com">Email</a>
+    </div>
+    <div class="footer-copy">© 2026 Yavkrit Vashishtha · Built with precision & passion</div>
+  </div>
+</footer>
+
+<!-- Gesture Navigation Panel -->
+<div id="gesture-panel" class="gesture-panel" aria-hidden="true">
+  <div class="gesture-panel-header">
+    <span class="gesture-panel-title">✋ GESTURE MODE</span>
+    <span class="gesture-status-dot"></span>
+  </div>
+  <div class="gesture-cam-wrap">
+    <video id="gesture-preview" class="gesture-preview" playsinline muted></video>
+    <div class="gesture-cam-overlay"></div>
+  </div>
+  <div id="gesture-label" class="gesture-label"></div>
+  <div id="gesture-hint" class="gesture-hint">
+    <div class="hint-row"><span class="hint-glyph">🖐</span><span>Open palm — scroll</span></div>
+    <div class="hint-row"><span class="hint-glyph">✌️</span><span>Victory — next section</span></div>
+    <div class="hint-row"><span class="hint-glyph">👍</span><span>Thumbs up — prev section</span></div>
+    <div class="hint-row"><span class="hint-glyph">☝️</span><span>Point — focus button</span></div>
+    <div class="hint-row"><span class="hint-glyph">👌</span><span>Pinch — click it</span></div>
+  </div>
+</div>
+
+<script src="data/portfolio-data.js"></script>
+<script src="js/three-bg.js"></script>
+<script src="js/hero.js"></script>
+<script src="js/render.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/main.js"></script>
+<script src="js/gesture.js"></script>
+
+</body>
+</html>
