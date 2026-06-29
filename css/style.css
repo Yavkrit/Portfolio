@@ -919,12 +919,25 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
 }
 .project-card:hover .project-thumb-img { transform: scale(1.06); }
 
+/* Image layered over canvas — canvas 3D behind, image on top */
+.project-thumb-img--overlay {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  mix-blend-mode: lighten;
+  opacity: 0.92;
+}
+.project-thumb--contain .project-thumb-img--overlay {
+  object-fit: contain; padding: 8px;
+}
+
 /* Contain variant — full image visible, no crop */
-.project-thumb--contain { background: #07090e; }
+.project-thumb--contain {
+  background: radial-gradient(ellipse at center, #0a1628 0%, #020408 100%);
+}
 .project-thumb-img--contain {
   object-fit: contain; object-position: center;
-  padding: 10px;
-  filter: brightness(.95) saturate(1.05);
+  padding: 8px;
+  filter: brightness(.97) saturate(1.05);
 }
 .project-card:hover .project-thumb-img--contain { transform: scale(1.03); }
 

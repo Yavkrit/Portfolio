@@ -161,13 +161,22 @@
             <div class="capstone-icon-overlay">${p.capstoneIcon || '📊'}</div>
             <div class="capstone-label">${p.category}</div>
           </div>`;
-      } else if (p.customVis === 'camera_composite') {
-        const [img1, img2] = p.heroImages || [];
+      } else if (p.heroImage && p.customVis === 'camera') {
         thumbHtml = `
-          <div class="project-thumb camera-composite-thumb">
-            <img src="${img1}" class="cam-base-img" alt="Camera hardware" loading="lazy">
-            <img src="${img2}" class="cam-lens-img" alt="Camera technology" loading="lazy">
-            <div class="cam-split-line"></div>
+          <div class="project-thumb" style="position:relative;">
+            <canvas class="custom-vis-canvas" data-vis="camera" data-id="${p.id}"
+              style="width:100%;height:100%;display:block;position:absolute;inset:0"></canvas>
+            <img src="${p.heroImage}" class="project-thumb-img project-thumb-img--overlay" alt="${p.title}" loading="lazy"
+              onerror="this.style.display='none'">
+            <span class="project-status-badge ${statusCls}">${p.status}</span>
+          </div>`;
+      } else if (p.heroImage && p.customVis === 'thz_plantar') {
+        thumbHtml = `
+          <div class="project-thumb project-thumb--contain" style="position:relative;">
+            <canvas class="custom-vis-canvas" data-vis="thz_plantar" data-id="${p.id}"
+              style="width:100%;height:100%;display:block;position:absolute;inset:0"></canvas>
+            <img src="${p.heroImage}" class="project-thumb-img project-thumb-img--contain project-thumb-img--overlay" alt="${p.title}" loading="lazy"
+              onerror="this.style.display='none'">
             <span class="project-status-badge ${statusCls}">${p.status}</span>
           </div>`;
       } else if (p.heroImage) {
@@ -219,6 +228,12 @@
         if (p.isCapstone) {
           const cvs = card.querySelector(`.capstone-canvas[data-id="${p.id}"]`);
           initCapstoneCanvas(cvs, 'rgb(0,180,255)', 'rgb(168,85,247)');
+        } else if (p.customVis === 'camera') {
+          const cvs = card.querySelector(`.custom-vis-canvas[data-id="${p.id}"]`);
+          if (cvs) initCameraVis(cvs);
+        } else if (p.customVis === 'thz_plantar') {
+          const cvs = card.querySelector(`.custom-vis-canvas[data-id="${p.id}"]`);
+          if (cvs) initTHzVis(cvs);
         }
       });
     });
