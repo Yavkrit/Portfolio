@@ -2,9 +2,6 @@
   publish = "."
   functions = "netlify/functions"
 
-[build.environment]
-  RESEND_API_KEY = "re_Gnzwz5Uf_82TAUE9zsKF7NSGTFpb29pDS"
-
 [[headers]]
   for = "/*"
   [headers.values]
