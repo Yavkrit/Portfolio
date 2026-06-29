@@ -380,21 +380,26 @@
   const certModalContent = document.getElementById('cert-modal-content');
   const certModalClose   = document.getElementById('cert-modal-close');
 
+  const _thumbCache = new Map(); // pdfUrl -> dataURL
+
   async function renderPdfThumb(pdfUrl, container) {
     const lib = window.pdfjsLib;
     if (!lib) { container.innerHTML = `<div class="cert-thumb-placeholder-icon">📜</div>`; return; }
 
-    // Always (re)set worker here — safe to call multiple times
     lib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+    // Restore from cache instantly if available
+    if (_thumbCache.has(pdfUrl)) {
+      _restoreThumbFromCache(pdfUrl, container);
+      return;
+    }
 
     container.innerHTML = `<div class="cert-thumb-loading"><div class="cert-thumb-spinner"></div><span>LOADING</span></div>`;
     try {
       const pdf      = await lib.getDocument(pdfUrl).promise;
       const page     = await pdf.getPage(1);
       const srcVP    = page.getViewport({ scale: 1 });
-
-      // Use fixed 280px target width — reliable regardless of container paint state
       const scale    = 280 / srcVP.width;
       const viewport = page.getViewport({ scale });
 
@@ -406,6 +411,8 @@
 
       await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
 
+      _thumbCache.set(pdfUrl, canvas.toDataURL());
+
       container.innerHTML = '';
       container.appendChild(canvas);
       const ov = document.createElement('div');
@@ -416,6 +423,36 @@
       container.innerHTML = `<div class="cert-thumb-placeholder-icon">📜</div>`;
     }
   }
+
+  function _restoreThumbFromCache(pdfUrl, container) {
+    const dataUrl = _thumbCache.get(pdfUrl);
+    if (!dataUrl) return;
+    const img = document.createElement('img');
+    img.className = 'cert-thumb-canvas';
+    img.src = dataUrl;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+    container.innerHTML = '';
+    container.appendChild(img);
+    const ov = document.createElement('div');
+    ov.className = 'cert-thumb-overlay';
+    ov.textContent = '🔍 View PDF';
+    container.appendChild(ov);
+  }
+
+  // Re-paint thumbnails after fullscreen/resize (canvas may blank on some browsers)
+  function _repaintAllThumbs() {
+    _thumbCache.forEach((dataUrl, pdfUrl) => {
+      const containers = document.querySelectorAll('.cert-thumb-wrap');
+      containers.forEach(wrap => {
+        const canvas = wrap.querySelector('canvas.cert-thumb-canvas');
+        if (canvas && canvas.getContext('2d').getImageData(0,0,1,1).data[3] === 0) {
+          _restoreThumbFromCache(pdfUrl, wrap);
+        }
+      });
+    });
+  }
+  document.addEventListener('fullscreenchange', _repaintAllThumbs);
+  document.addEventListener('webkitfullscreenchange', _repaintAllThumbs);
 
   if (certsGrid) {
     P.certificates.forEach(c => {
@@ -473,7 +510,7 @@
             </div>
             <div class="cert-tab-row">${tabsHtml}</div>
             <div class="cert-iframe-wrap">
-              <iframe class="cert-pdf-iframe" src="${c.pdfs[tabIdx].file}" title="${c.title}"></iframe>
+              <iframe class="cert-pdf-iframe" src="${c.pdfs[tabIdx].file}" title="${c.title}" allowfullscreen></iframe>
             </div>
           </div>`;
         window.switchCertTab = function(i) {
@@ -498,7 +535,7 @@
               </div>
             </div>
             <div class="cert-iframe-wrap">
-              <iframe class="cert-pdf-iframe" src="${pdfSrc}" title="${c.title}"></iframe>
+              <iframe class="cert-pdf-iframe" src="${pdfSrc}" title="${c.title}" allowfullscreen></iframe>
             </div>
           </div>`;
       } else {

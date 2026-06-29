@@ -806,8 +806,10 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
 .contact-card { background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px; }
 .contact-item { display: flex; align-items: center; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--border-dim); transition: opacity .3s; }
 .contact-item:last-child { border-bottom: none; }
-.contact-item:hover { opacity: .75; }
-.contact-icon { font-size: 18px; flex-shrink: 0; }
+.contact-item:hover { opacity: 1; }
+.contact-icon { width: 40px; height: 40px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(245,158,11,.07); border: 1px solid rgba(245,158,11,.15); border-radius: 10px; color: var(--accent-gold); transition: background .3s, border-color .3s, box-shadow .3s; }
+.contact-icon svg { width: 18px; height: 18px; display: block; }
+.contact-item:hover .contact-icon { background: rgba(245,158,11,.14); border-color: rgba(245,158,11,.38); box-shadow: 0 0 12px rgba(245,158,11,.12); }
 .ci-label { font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
 .ci-val { font-size: 14px; color: var(--text-primary); margin-top: 2px; }
 .resume-download-btn {

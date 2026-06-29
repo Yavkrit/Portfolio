@@ -19,7 +19,6 @@ window.PORTFOLIO = {
     tagline: "Where science meets engineering meets art.",
     bio: `Embedded Software Engineer and Research Scholar with 2+ years of industry experience in firmware development, Linux-based systems, and protocol integration for IP camera platforms. Pursuing Integrated M.Tech + Ph.D. in Biomedical Instrumentation & AI at AcSIR (CSIR-CSIO), focusing on Terahertz-based diagnostic imaging.`,
     email: "yvashishtha04@gmail.com",
-    phone: "+91 6359100188",
     github: "https://github.com/Yavkrit",
     linkedin: "https://www.linkedin.com/in/yavkrit-vashishtha-50819b286",
     location: "Chandigarh, India",
