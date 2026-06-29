@@ -268,14 +268,14 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
 .hero-label {
   font-size: 10px; letter-spacing: 4px; font-weight: 600;
   color: var(--accent-blue); text-transform: uppercase; margin-bottom: 16px;
-  opacity: 0; animation: fadeUp 1s .7s ease forwards;
+  /* opacity + animation controlled by JS reveal sequence */
 }
 
 .hero-name {
   font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(52px, 8.5vw, 110px);
   font-weight: 700; line-height: .92; letter-spacing: -2px;
-  opacity: 0; animation: fadeUp 1s .9s ease forwards;
+  /* opacity + animation controlled by JS reveal sequence */
 }
 
 .hero-first {
@@ -293,7 +293,7 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
   display: flex; align-items: center; gap: 10px;
   font-size: clamp(15px, 2.2vw, 22px); margin-top: 16px;
   color: var(--text-secondary);
-  opacity: 0; animation: fadeUp 1s 1.1s ease forwards;
+  /* opacity controlled by JS reveal sequence */
 }
 .hero-role-prefix { font-weight: 300; }
 .hero-role-cycle { color: var(--accent-orange); font-weight: 600; border-bottom: 1px solid var(--accent-orange); transition: opacity .3s, transform .3s; }
@@ -301,12 +301,12 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
 .hero-tagline {
   font-size: 11px; letter-spacing: 3px; color: var(--text-muted);
   margin-top: 10px; text-transform: uppercase;
-  opacity: 0; animation: fadeUp 1s 1.3s ease forwards;
+  /* opacity controlled by JS reveal sequence */
 }
 
 .hero-cta {
-  display: flex; gap: 16px; margin-top: 32px; pointer-events: all;
-  opacity: 0; animation: fadeUp 1s 1.5s ease forwards;
+  display: flex; gap: 16px; margin-top: 32px; pointer-events: none;
+  /* opacity + pointer-events controlled by JS reveal sequence */
 }
 
 @keyframes fadeUp {
@@ -325,6 +325,188 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
 @keyframes scrollBounce { 0%,100%{transform:scaleY(1);opacity:1} 50%{transform:scaleY(.4);opacity:.3} }
 .scroll-indicator span { font-size: 9px; letter-spacing: 3px; color: var(--text-muted); }
 @keyframes fadeIn { to { opacity: 1; } }
+
+/* ══ HERO CINEMATIC ENHANCEMENTS ════════════════════════════
+
+   Scanlines ─────────────────────────────────────────────── */
+.hero-scanlines {
+  position: absolute; inset: 0; z-index: 6; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,.025) 3px, rgba(0,0,0,.025) 4px
+  );
+}
+
+/* Radar scan beam ──────────────────────────────────────── */
+.hero-scanbeam {
+  position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  z-index: 9; pointer-events: none; opacity: 0;
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(0,180,255,.3) 10%,
+    rgba(0,180,255,1) 50%,
+    rgba(168,85,247,.8) 70%, transparent 100%);
+  box-shadow: 0 0 18px 5px rgba(0,180,255,.55), 0 0 60px 12px rgba(0,180,255,.15);
+}
+.hero-scanbeam.sb-active {
+  animation: scanBeamSweep 1.8s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes scanBeamSweep {
+  0%   { top: -2px; opacity: 0; }
+  4%   { opacity: 1; }
+  92%  { opacity: .5; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Speed lines ──────────────────────────────────────────── */
+.hero-speedlines {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden;
+}
+.spline {
+  position: absolute; height: 1px;
+  top: var(--sl-top, 50%); width: var(--sl-w, 40%); left: -110%;
+  opacity: var(--sl-o, 1);
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(0,180,255,.45) 15%,
+    rgba(0,180,255,.95) 55%, rgba(168,85,247,.65) 80%, transparent 100%);
+}
+.hero-speedlines.sl-active .spline {
+  animation: splineRush .75s cubic-bezier(.15,1,.3,1) forwards;
+  animation-delay: var(--sl-d, 0s);
+}
+@keyframes splineRush {
+  0%   { left: -110%; }
+  100% { left: 130%; }
+}
+
+/* HUD overlay ──────────────────────────────────────────── */
+.hero-hud {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  will-change: transform;
+}
+
+/* Left side tags */
+.hud-tag {
+  position: absolute; left: 4.5%;
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: rgba(0,180,255,.52);
+  opacity: 0; transform: translateX(-18px);
+}
+.hud-tag.ht-vis {
+  transition: opacity .55s ease var(--ht-d,.0s), transform .55s ease var(--ht-d,.0s);
+  opacity: 1; transform: translateX(0);
+}
+.ht-1 { top: 30%; }
+.ht-2 { top: 44%; }
+.ht-3 { top: 58%; }
+
+.hud-pip {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+  background: var(--accent-blue);
+  box-shadow: 0 0 7px 2px rgba(0,180,255,.7);
+  animation: hudPip 2.2s ease-in-out infinite;
+}
+@keyframes hudPip {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%     { opacity:.3; transform:scale(.6); }
+}
+.hud-dash { width: 20px; height: 1px; background: rgba(0,180,255,.35); flex-shrink: 0; }
+.hud-txt  { white-space: nowrap; }
+
+/* Right side stats */
+.hud-stat {
+  position: absolute; right: 4.5%;
+  display: flex; flex-direction: column; align-items: flex-end;
+  font-family: 'JetBrains Mono', monospace;
+  opacity: 0; transform: translateX(18px);
+}
+.hud-stat.hs-vis {
+  transition: opacity .55s ease var(--hs-d,.0s), transform .55s ease var(--hs-d,.0s);
+  opacity: 1; transform: translateX(0);
+}
+.hs-1 { top: 30%; }
+.hs-2 { top: 44%; }
+.hs-3 { top: 58%; }
+
+.hud-sval {
+  display: flex; align-items: baseline; gap: 1px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 30px; font-weight: 700; line-height: 1;
+  background: linear-gradient(135deg, #fff 25%, rgba(0,180,255,.9));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hud-unit { font-size: 20px; font-weight: 600; }
+.hud-slbl {
+  font-size: 8px; letter-spacing: 2.5px; color: rgba(0,180,255,.48);
+  margin-top: 3px; text-transform: uppercase;
+}
+
+/* Name — initial hidden state for JS reveal */
+.hero-first.hw-init,
+.hero-last.hw-init {
+  clip-path: inset(0 101% 0 0);
+}
+.hero-first.hw-reveal {
+  animation: nameWipe .9s cubic-bezier(.22,1,.36,1) .12s forwards;
+}
+.hero-last.hw-reveal {
+  animation: nameWipe .9s cubic-bezier(.22,1,.36,1) .38s forwards;
+}
+@keyframes nameWipe {
+  0%   { clip-path: inset(0 101% 0 0); filter: blur(3px); }
+  60%  { filter: blur(0); }
+  100% { clip-path: inset(0 0% 0 0);   filter: blur(0); }
+}
+
+/* Name glitch burst */
+@keyframes nameGlitch {
+  0%,100% { transform: none; filter: none; }
+  12%     { transform: translate(-3px,0) skewX(-5deg); filter: hue-rotate(90deg) saturate(1.8); }
+  28%     { transform: translate( 3px,0) skewX( 4deg); filter: hue-rotate(-90deg) saturate(1.8); }
+  44%     { transform: translate(-1px,0) skewX(-1deg); filter: hue-rotate(30deg); }
+  60%,90% { transform: none; filter: none; }
+}
+.hero-name.glitch { animation: nameGlitch .38s steps(4,end); }
+
+/* Label enhanced entry */
+.hero-label.hl-reveal {
+  animation: labelReveal .75s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes labelReveal {
+  from { opacity:0; transform:translateX(-22px); letter-spacing:8px; }
+  to   { opacity:1; transform:translateX(0);     letter-spacing:4px; }
+}
+
+/* Hero primary button — arrow animation */
+.hero-btn-primary { overflow: hidden; position: relative; }
+.hero-arrow {
+  display: inline-block;
+  transition: transform .3s ease, opacity .3s ease;
+}
+.hero-btn-primary:hover .hero-arrow { transform: translateX(5px); }
+
+/* Vertical scroll progress bar (right edge) */
+.hero-progress {
+  position: absolute; right: 16px; top: 18%; bottom: 18%;
+  width: 2px; background: rgba(0,180,255,.1); z-index: 5;
+  border-radius: 2px;
+}
+.hero-prog-fill {
+  position: absolute; top: 0; left: 0; right: 0; height: 0%;
+  background: linear-gradient(180deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(0,180,255,.6);
+  transition: height .08s linear;
+}
+
+/* Hide HUD on small screens */
+@media (max-width: 900px) {
+  .hero-hud { display: none; }
+  .hero-progress { display: none; }
+}
+
+/* ── END HERO ENHANCEMENTS ──────────────────────────────── */
 
 /* ── BUTTONS ────────────────────────────────────────────── */
 .btn-primary {

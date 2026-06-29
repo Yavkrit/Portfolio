@@ -76,50 +76,112 @@
 <section id="hero">
   <div id="hero-sticky">
 
-    <!-- Enhanced particle canvas -->
+    <!-- Particle canvas -->
     <canvas id="hero-canvas"></canvas>
 
     <!-- Aurora layer -->
     <div class="hero-aurora"></div>
 
-    <!-- Cinematic portrait — fills screen -->
+    <!-- Scanlines texture (very subtle) -->
+    <div class="hero-scanlines"></div>
+
+    <!-- Portrait -->
     <div class="hero-portrait-wrap">
-      <img
-        id="hero-portrait-main"
-        src="images/portrait_1.png"
-        alt="Yavkrit Vashishtha"
-        class="hero-portrait-img"
-      >
+      <img id="hero-portrait-main" src="images/portrait_1.png"
+           alt="Yavkrit Vashishtha" class="hero-portrait-img">
       <div class="hero-overlay-bottom"></div>
       <div class="hero-overlay-sides"></div>
     </div>
 
-    <!-- Vignette -->
+    <!-- Depth gradient overlays -->
     <div class="hero-vignette"></div>
 
-    <!-- Light streaks -->
+    <!-- Radar scan beam — single sweep on entry -->
+    <div class="hero-scanbeam" id="hero-scanbeam"></div>
+
+    <!-- Speed lines — burst on entry -->
+    <div class="hero-speedlines" id="hero-speedlines">
+      <div class="spline" style="--sl-top:17%;--sl-w:52%;--sl-d:.03s"></div>
+      <div class="spline" style="--sl-top:29%;--sl-w:35%;--sl-d:.11s;--sl-o:.65"></div>
+      <div class="spline" style="--sl-top:44%;--sl-w:62%;--sl-d:.06s;--sl-o:.85"></div>
+      <div class="spline" style="--sl-top:58%;--sl-w:28%;--sl-d:.17s;--sl-o:.55"></div>
+      <div class="spline" style="--sl-top:70%;--sl-w:45%;--sl-d:.09s;--sl-o:.75"></div>
+      <div class="spline" style="--sl-top:82%;--sl-w:22%;--sl-d:.24s;--sl-o:.4"></div>
+    </div>
+
+    <!-- Ambient light streaks (existing, kept) -->
     <div class="hero-streaks">
       <div class="streak s1"></div>
       <div class="streak s2"></div>
       <div class="streak s3"></div>
     </div>
 
+    <!-- HUD overlay — floating engineering telemetry -->
+    <div class="hero-hud" id="hero-hud">
+
+      <!-- Left: identity tags -->
+      <div class="hud-tag ht-1" style="--ht-d:.0s">
+        <span class="hud-pip"></span>
+        <span class="hud-dash"></span>
+        <span class="hud-txt">CSIR-CSIO · AcSIR NEW DELHI</span>
+      </div>
+      <div class="hud-tag ht-2" style="--ht-d:.15s">
+        <span class="hud-pip"></span>
+        <span class="hud-dash"></span>
+        <span class="hud-txt">FIRMWARE · LINUX · RTOS</span>
+      </div>
+      <div class="hud-tag ht-3" style="--ht-d:.30s">
+        <span class="hud-pip"></span>
+        <span class="hud-dash"></span>
+        <span class="hud-txt">THZ · AI · DEEP LEARNING</span>
+      </div>
+
+      <!-- Right: stats -->
+      <div class="hud-stat hs-1" style="--hs-d:.0s">
+        <div class="hud-sval">
+          <span class="hud-n" data-val="2">0</span><span class="hud-unit">+</span>
+        </div>
+        <div class="hud-slbl">YRS EXP</div>
+      </div>
+      <div class="hud-stat hs-2" style="--hs-d:.18s">
+        <div class="hud-sval">
+          <span class="hud-n" data-val="8.69" data-dec="2">0</span>
+        </div>
+        <div class="hud-slbl">B.TECH CGPA</div>
+      </div>
+      <div class="hud-stat hs-3" style="--hs-d:.36s">
+        <div class="hud-sval">
+          <span class="hud-n" data-val="6">0</span><span class="hud-unit">+</span>
+        </div>
+        <div class="hud-slbl">CERTS</div>
+      </div>
+
+    </div>
+
     <!-- Hero text content -->
-    <div class="hero-content">
-      <div class="hero-label">EMBEDDED ENGINEER · AI RESEARCHER · PHD SCHOLAR</div>
-      <h1 class="hero-name">
-        <span class="hero-first">Yavkrit</span>
-        <span class="hero-last">Vashishtha</span>
+    <div class="hero-content" id="hero-content">
+      <div class="hero-label" id="hero-label">EMBEDDED ENGINEER · AI RESEARCHER · PHD SCHOLAR</div>
+      <h1 class="hero-name" id="hero-name">
+        <span class="hero-first" id="hero-first">Yavkrit</span>
+        <span class="hero-last" id="hero-last">Vashishtha</span>
       </h1>
-      <div class="hero-role-wrap">
+      <div class="hero-role-wrap" id="hero-role-wrap">
         <span class="hero-role-prefix">I build</span>
         <span class="hero-role-cycle" id="role-cycle">the future</span>
       </div>
-      <p class="hero-tagline">CSIR-CSIO · Chandigarh · AcSIR New Delhi</p>
-      <div class="hero-cta">
-        <a href="#projects" class="btn-primary">Explore My Work</a>
+      <p class="hero-tagline" id="hero-tagline">CSIR-CSIO · CHANDIGARH · ACSIR NEW DELHI</p>
+      <div class="hero-cta" id="hero-cta">
+        <a href="#projects" class="btn-primary hero-btn-primary">
+          <span>Explore My Work</span>
+          <span class="hero-arrow">→</span>
+        </a>
         <a href="#contact" class="btn-ghost">Get In Touch</a>
       </div>
+    </div>
+
+    <!-- Vertical progress bar (scroll depth) -->
+    <div class="hero-progress" id="hero-progress">
+      <div class="hero-prog-fill" id="hero-prog-fill"></div>
     </div>
 
     <!-- Scroll indicator -->
