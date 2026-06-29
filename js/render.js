@@ -161,22 +161,20 @@
             <div class="capstone-icon-overlay">${p.capstoneIcon || '📊'}</div>
             <div class="capstone-label">${p.category}</div>
           </div>`;
-      } else if (p.customVis === 'camera') {
+      } else if (p.customVis === 'camera_composite') {
+        const [img1, img2] = p.heroImages || [];
         thumbHtml = `
-          <div class="project-thumb">
-            <canvas class="custom-vis-canvas" data-vis="camera" data-id="${p.id}" style="width:100%;height:100%;display:block"></canvas>
-            <span class="project-status-badge ${statusCls}">${p.status}</span>
-          </div>`;
-      } else if (p.customVis === 'thz_plantar') {
-        thumbHtml = `
-          <div class="project-thumb">
-            <canvas class="custom-vis-canvas" data-vis="thz_plantar" data-id="${p.id}" style="width:100%;height:100%;display:block"></canvas>
+          <div class="project-thumb camera-composite-thumb">
+            <img src="${img1}" class="cam-base-img" alt="Camera hardware" loading="lazy">
+            <img src="${img2}" class="cam-lens-img" alt="Camera technology" loading="lazy">
+            <div class="cam-split-line"></div>
             <span class="project-status-badge ${statusCls}">${p.status}</span>
           </div>`;
       } else if (p.heroImage) {
+        const fitCls = p.thumbFit === 'contain' ? 'project-thumb-img--contain' : '';
         thumbHtml = `
-          <div class="project-thumb">
-            <img src="${p.heroImage}" class="project-thumb-img" alt="${p.title}" loading="lazy"
+          <div class="project-thumb${p.thumbFit === 'contain' ? ' project-thumb--contain' : ''}">
+            <img src="${p.heroImage}" class="project-thumb-img ${fitCls}" alt="${p.title}" loading="lazy"
               onerror="this.parentElement.innerHTML='<div class=\\'project-thumb-placeholder\\'><div class=\\'project-thumb-icon\\'>⚙️</div></div>'">
             <span class="project-status-badge ${statusCls}">${p.status}</span>
           </div>`;
@@ -221,12 +219,6 @@
         if (p.isCapstone) {
           const cvs = card.querySelector(`.capstone-canvas[data-id="${p.id}"]`);
           initCapstoneCanvas(cvs, 'rgb(0,180,255)', 'rgb(168,85,247)');
-        } else if (p.customVis === 'camera') {
-          const cvs = card.querySelector(`.custom-vis-canvas[data-id="${p.id}"]`);
-          initCameraVis(cvs);
-        } else if (p.customVis === 'thz_plantar') {
-          const cvs = card.querySelector(`.custom-vis-canvas[data-id="${p.id}"]`);
-          initTHzVis(cvs);
         }
       });
     });

@@ -918,6 +918,43 @@ body.cursor-hover #cursor-follower { width: 48px; height: 48px; border-color: va
   transition: transform .6s ease; filter: brightness(.85) saturate(1.05);
 }
 .project-card:hover .project-thumb-img { transform: scale(1.06); }
+
+/* Contain variant — full image visible, no crop */
+.project-thumb--contain { background: #07090e; }
+.project-thumb-img--contain {
+  object-fit: contain; object-position: center;
+  padding: 10px;
+  filter: brightness(.95) saturate(1.05);
+}
+.project-card:hover .project-thumb-img--contain { transform: scale(1.03); }
+
+/* Camera composite — diagonal split of two images */
+.camera-composite-thumb { position: relative; overflow: hidden; }
+.cam-base-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  filter: brightness(.8) saturate(1.1);
+  transition: transform .6s ease;
+}
+.cam-lens-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center left;
+  clip-path: polygon(42% 0%, 100% 0%, 100% 100%, 22% 100%);
+  filter: brightness(.85) saturate(1.15);
+  transition: transform .6s ease;
+}
+.cam-split-line {
+  position: absolute; top: 0; bottom: 0;
+  left: 33%; width: 1px;
+  background: linear-gradient(to bottom,
+    transparent 0%, rgba(0,180,255,.7) 30%,
+    rgba(0,180,255,.7) 70%, transparent 100%);
+  z-index: 2; pointer-events: none;
+}
+.project-card:hover .cam-base-img { transform: scale(1.04); }
+.project-card:hover .cam-lens-img  { transform: scale(1.04); }
 .project-thumb-placeholder {
   width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
   background: linear-gradient(135deg, var(--bg-panel), var(--bg-card));
