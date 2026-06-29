@@ -2,28 +2,30 @@
 (function() {
 
   // ── CURSOR ─────────────────────────────────────────────
-  const cursor = document.getElementById('cursor');
+  const cursor   = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
-  let fx = 0, fy = 0, cx = 0, cy = 0;
 
-  document.addEventListener('mousemove', e => {
-    cx = e.clientX; cy = e.clientY;
-    if (cursor) {
-      cursor.style.left = cx + 'px';
-      cursor.style.top = cy + 'px';
-    }
-  });
-
-  function animateFollower() {
-    fx += (cx - fx) * 0.1;
-    fy += (cy - fy) * 0.1;
-    if (follower) {
-      follower.style.left = fx + 'px';
-      follower.style.top = fy + 'px';
-    }
-    requestAnimationFrame(animateFollower);
+  // Both dot and ring move together — no positional lag.
+  // Size/color transitions are handled by CSS only.
+  function moveCursor(x, y) {
+    const t = `translate(calc(${x}px - 50%), calc(${y}px - 50%))`;
+    if (cursor)   cursor.style.transform   = t;
+    if (follower) follower.style.transform = t;
   }
-  animateFollower();
+
+  document.addEventListener('mousemove', e => moveCursor(e.clientX, e.clientY));
+
+  // Hide both during scroll so they don't get stuck; restore on next move
+  let scrollHideTimer;
+  window.addEventListener('scroll', () => {
+    if (cursor)   cursor.style.opacity   = '0';
+    if (follower) follower.style.opacity = '0';
+    clearTimeout(scrollHideTimer);
+    scrollHideTimer = setTimeout(() => {
+      if (cursor)   cursor.style.opacity   = '1';
+      if (follower) follower.style.opacity = '1';
+    }, 120);
+  }, { passive: true });
 
   const hoverTargets = 'a,button,.project-card,.cert-card,.stat-card,.exp-nav-item';
   document.querySelectorAll(hoverTargets).forEach(el => {

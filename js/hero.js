@@ -205,12 +205,13 @@
   let revealRaf = null;
 
   function updateReveal(clientX, clientY) {
-    if (!portraitTech || !portraitWrap) return;
-    const rect = portraitWrap.getBoundingClientRect();
+    if (!portraitTech) return;
+    // Use the tech image's own bounding rect so % coords map exactly to cursor
+    const rect = portraitTech.getBoundingClientRect();
     const px = ((clientX - rect.left) / rect.width  * 100).toFixed(2);
     const py = ((clientY - rect.top)  / rect.height * 100).toFixed(2);
-    const r  = Math.min(rect.width, rect.height) * 0.30; // ~30% of smaller dimension
-    const mask = `radial-gradient(circle ${r.toFixed(0)}px at ${px}% ${py}%, black 0%, black 45%, transparent 75%)`;
+    const r  = 110; // fixed px — same bubble size regardless of image zoom
+    const mask = `radial-gradient(circle ${r.toFixed(0)}px at ${px}% ${py}%, black 0%, black 55%, transparent 90%)`;
     portraitTech.style.webkitMaskImage = mask;
     portraitTech.style.maskImage       = mask;
   }
