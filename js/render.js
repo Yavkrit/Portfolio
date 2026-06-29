@@ -486,69 +486,112 @@
     });
   }
 
+  async function renderPdfInModal(pdfUrl, canvasWrap, pageInfoEl, prevBtn, nextBtn) {
+    const lib = window.pdfjsLib;
+    if (!lib) { canvasWrap.innerHTML = '<div class="cert-thumb-placeholder-icon" style="font-size:48px;opacity:.3;padding:60px">📜</div>'; return; }
+    lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+    canvasWrap.innerHTML = `<div class="cert-thumb-loading" style="padding:60px 0"><div class="cert-thumb-spinner"></div><span>LOADING</span></div>`;
+
+    let pdfDoc, currentPage = 1;
+
+    async function drawPage(num) {
+      const page    = await pdfDoc.getPage(num);
+      const vp0     = page.getViewport({ scale: 1 });
+      const maxW    = canvasWrap.clientWidth || 760;
+      const scale   = maxW / vp0.width;
+      const vp      = page.getViewport({ scale });
+
+      const canvas  = document.createElement('canvas');
+      canvas.width  = vp.width;
+      canvas.height = vp.height;
+      canvas.style.cssText = 'width:100%;display:block;border-radius:8px;';
+
+      canvasWrap.innerHTML = '';
+      canvasWrap.appendChild(canvas);
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+
+      if (pageInfoEl) pageInfoEl.textContent = `${num} / ${pdfDoc.numPages}`;
+      if (prevBtn) prevBtn.disabled = num <= 1;
+      if (nextBtn) nextBtn.disabled = num >= pdfDoc.numPages;
+    }
+
+    try {
+      pdfDoc = await lib.getDocument(pdfUrl).promise;
+      await drawPage(1);
+
+      if (prevBtn) prevBtn.addEventListener('click', async () => { if (currentPage > 1) { currentPage--; await drawPage(currentPage); } });
+      if (nextBtn) nextBtn.addEventListener('click', async () => { if (currentPage < pdfDoc.numPages) { currentPage++; await drawPage(currentPage); } });
+
+      // Hide nav if single page
+      if (pdfDoc.numPages <= 1 && prevBtn) {
+        prevBtn.parentElement && (prevBtn.parentElement.style.display = 'none');
+      }
+    } catch (e) {
+      canvasWrap.innerHTML = '<div style="padding:40px;color:#888;text-align:center">Could not load PDF preview.<br><small>Use "Open Full" to view in a new tab.</small></div>';
+    }
+  }
+
   window.openCert = function(id) {
     const c = P.certificates.find(x => x.id === id);
     if (!c || !certModalContent) return;
 
-    // Multi-PDF cert
-    if (c.pdfs && c.pdfs.length > 1) {
-      let activeTab = 0;
-      function buildViewer(tabIdx) {
-        const tabsHtml = c.pdfs.map((p, i) =>
-          `<button class="cert-tab-btn ${i===tabIdx?'active':''}" onclick="switchCertTab(${i})">${p.label}</button>`
-        ).join('');
-        certModalContent.innerHTML = `
-          <div class="cert-pdf-viewer-wrap">
-            <div class="cert-viewer-header">
-              <div>
-                <div class="cert-viewer-title">${c.title}</div>
-                <div class="cert-viewer-issuer">${c.issuer} · ${c.date}</div>
-              </div>
-              <div class="cert-viewer-actions">
-                <a href="${c.pdfs[tabIdx].file}" target="_blank" class="cert-open-btn">Open Full ↗</a>
-              </div>
-            </div>
-            <div class="cert-tab-row">${tabsHtml}</div>
-            <div class="cert-iframe-wrap">
-              <iframe class="cert-pdf-iframe" src="${c.pdfs[tabIdx].file}" title="${c.title}" allowfullscreen></iframe>
-            </div>
-          </div>`;
-        window.switchCertTab = function(i) {
-          activeTab = i;
-          buildViewer(i);
-        };
-      }
-      buildViewer(0);
-    } else {
-      // Single PDF
-      const pdfSrc = c.pdfFile || (c.pdfs && c.pdfs[0].file) || null;
-      if (pdfSrc) {
-        certModalContent.innerHTML = `
-          <div class="cert-pdf-viewer-wrap">
-            <div class="cert-viewer-header">
-              <div>
-                <div class="cert-viewer-title">${c.title}</div>
-                <div class="cert-viewer-issuer">${c.issuer} · ${c.date}</div>
-              </div>
-              <div class="cert-viewer-actions">
-                <a href="${pdfSrc}" target="_blank" class="cert-open-btn">Open Full ↗</a>
-              </div>
-            </div>
-            <div class="cert-iframe-wrap">
-              <iframe class="cert-pdf-iframe" src="${pdfSrc}" title="${c.title}" allowfullscreen></iframe>
-            </div>
-          </div>`;
-      } else {
-        certModalContent.innerHTML = `
-          <div class="cert-modal-body">
-            <div class="cert-modal-placeholder">📜</div>
-            <div class="cert-modal-title">${c.title}</div>
-            <div class="cert-modal-issuer">${c.issuer}</div>
-            <div class="cert-modal-date">${c.date}</div>
-          </div>`;
-      }
+    const pdfs = c.pdfs && c.pdfs.length ? c.pdfs : (c.pdfFile ? [{ label: c.title, file: c.pdfFile }] : []);
+
+    if (!pdfs.length) {
+      certModalContent.innerHTML = `
+        <div class="cert-modal-body">
+          <div class="cert-modal-placeholder">📜</div>
+          <div class="cert-modal-title">${c.title}</div>
+          <div class="cert-modal-issuer">${c.issuer}</div>
+          <div class="cert-modal-date">${c.date}</div>
+        </div>`;
+      certModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      return;
     }
 
+    let activeTab = 0;
+
+    function buildViewer(tabIdx) {
+      const tabsHtml = pdfs.length > 1
+        ? `<div class="cert-tab-row">${pdfs.map((p, i) => `<button class="cert-tab-btn ${i===tabIdx?'active':''}" data-tab="${i}">${p.label}</button>`).join('')}</div>`
+        : '';
+      certModalContent.innerHTML = `
+        <div class="cert-pdf-viewer-wrap">
+          <div class="cert-viewer-header">
+            <div>
+              <div class="cert-viewer-title">${c.title}</div>
+              <div class="cert-viewer-issuer">${c.issuer} · ${c.date}</div>
+            </div>
+            <div class="cert-viewer-actions">
+              <a href="${pdfs[tabIdx].file}" target="_blank" class="cert-open-btn">Open Full ↗</a>
+            </div>
+          </div>
+          ${tabsHtml}
+          <div class="cert-canvas-wrap" id="cert-modal-canvas-wrap"></div>
+          <div class="cert-page-nav" id="cert-page-nav">
+            <button class="cert-nav-btn" id="cert-prev-btn">‹ Prev</button>
+            <span class="cert-page-info" id="cert-page-info">— / —</span>
+            <button class="cert-nav-btn" id="cert-next-btn">Next ›</button>
+          </div>
+        </div>`;
+
+      // Tab switching
+      certModalContent.querySelectorAll('.cert-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => { activeTab = +btn.dataset.tab; buildViewer(activeTab); });
+      });
+
+      setTimeout(() => renderPdfInModal(
+        pdfs[tabIdx].file,
+        document.getElementById('cert-modal-canvas-wrap'),
+        document.getElementById('cert-page-info'),
+        document.getElementById('cert-prev-btn'),
+        document.getElementById('cert-next-btn')
+      ), 100);
+    }
+
+    buildViewer(0);
     certModal.classList.add('open');
     document.body.style.overflow = 'hidden';
   };
