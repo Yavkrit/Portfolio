@@ -9,7 +9,21 @@
       "Bash(start \"\" \"C:\\\\Users\\\\Yavkrit Vashishtha\\\\Downloads\\\\Portfolio\\\\index.html\")",
       "mcp__Claude_in_Chrome__navigate",
       "mcp__Claude_in_Chrome__tabs_context_mcp",
-      "PowerShell(\\(Get-Command node -ErrorAction SilentlyContinue\\).Source; \\(Get-Command npx -ErrorAction SilentlyContinue\\).Source)"
+      "PowerShell(\\(Get-Command node -ErrorAction SilentlyContinue\\).Source; \\(Get-Command npx -ErrorAction SilentlyContinue\\).Source)",
+      "Bash(command -v python)",
+      "Bash(command -v python3)",
+      "Bash(command -v node)",
+      "Bash(command -v npx)",
+      "PowerShell(Get-Command python3 -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command node -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command npx -ErrorAction SilentlyContinue)",
+      "PowerShell(Test-NetConnection -ComputerName localhost -Port 3001 -WarningAction SilentlyContinue)",
+      "PowerShell(Get-Process python -ErrorAction SilentlyContinue)",
+      "PowerShell(cd \"C:\\\\Users\\\\Dr.NAVEEN SHARMA\\\\Documents\\\\Website1\\\\Portfolio\"; Start-Process -FilePath \"python\" -ArgumentList \"-m\",\"http.server\",\"3002\" -PassThru -RedirectStandardOutput \"$env:TEMP\\\\pyout.log\" -RedirectStandardError \"$env:TEMP\\\\pyerr.log\"; Start-Sleep -Seconds 2; Get-Content \"$env:TEMP\\\\pyerr.log\" -ErrorAction SilentlyContinue; Get-Content \"$env:TEMP\\\\pyout.log\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Start-Sleep -Seconds 1; Test-NetConnection -ComputerName localhost -Port 3002 -WarningAction SilentlyContinue | Select-Object TcpTestSucceeded; try { \\(Invoke-WebRequest -Uri \"http://localhost:3002/index.html\" -UseBasicParsing -TimeoutSec 5\\).StatusCode } catch { $_.Exception.Message })",
+      "PowerShell(Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Process -Id 19752)",
+      "PowerShell(Stop-Process -Force)"
     ]
   }
 }

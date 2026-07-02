@@ -1342,3 +1342,39 @@ body, #nav, .section, .section-dark, .stat-card, .highlight-chip,
   }
 }
 
+/* ══════════════════════════════════════════════════════════
+   KNOW ABOUT ME — full-screen cinematic video section
+══════════════════════════════════════════════════════════ */
+.kam-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+.kam-video {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #000;
+}
+.kam-top-scrim {
+  position: absolute; top: 0; left: 0; right: 0; height: 200px; z-index: 1;
+  background: linear-gradient(to bottom, rgba(2,4,8,.7), transparent);
+  pointer-events: none;
+}
+.kam-label-overlay {
+  position: absolute; top: 30px; left: 40px; z-index: 2;
+  pointer-events: none;
+}
+.kam-label-text {
+  font-size: 11px; letter-spacing: 4px; font-weight: 600;
+  color: #fff; text-transform: uppercase;
+  text-shadow: 0 2px 12px rgba(0,0,0,.6);
+}
+
+@media (max-width: 768px) {
+  .kam-label-overlay { top: calc(var(--nav-h) + 16px); left: 20px; }
+}
+

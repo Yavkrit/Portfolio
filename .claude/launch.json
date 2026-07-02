@@ -3,10 +3,9 @@
   "configurations": [
     {
       "name": "portfolio",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server"],
-      "port": 3001,
-      "autoPort": true
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve", "-l", "3001"],
+      "port": 3001
     }
   ]
 }
